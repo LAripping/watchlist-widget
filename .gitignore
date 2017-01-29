@@ -15,7 +15,9 @@ out/
 
 # Gradle files
 .gradle/
+gradle/
 build/
+app/build/
 
 # Local configuration file (sdk path, etc)
 local.properties
@@ -38,3 +40,8 @@ captures/
 
 # Keystore files
 *.jks
+
+.idea/
+gradle.properties
+gradlew*
+app/proguard-rules.pro
