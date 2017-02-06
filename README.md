@@ -57,3 +57,7 @@ There was never an app for that since IMDB does not (officially) provide an API 
 * Option for ```watchlist.csv``` import, right from the main Screen
 * Reverse engineer the IMDb app for a way to perform the login
 
+
+## TODOs
+
+* Mention the Icon generator in the 'About' page, see License.
