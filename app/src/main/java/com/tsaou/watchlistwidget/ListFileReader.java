@@ -67,7 +67,11 @@ public class ListFileReader {
 
                 String mimeType = callerActivity.getContentResolver().getType(uri);
 
-                if (!displayName.endsWith(".csv") || !mimeType.equals("text/csv")) {
+                if (!
+                        (displayName.endsWith(".csv") ||
+                         mimeType.equals("text/csv")  ||
+                         mimeType.equals("text/comma-separated-values"))
+                   ) {
                     Log.i(TAG, "MIME type found: " + mimeType);
                     return false;
                 }

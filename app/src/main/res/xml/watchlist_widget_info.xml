@@ -4,7 +4,6 @@
     android:minHeight="40dp"
     android:updatePeriodMillis="86400000"
     android:initialLayout="@layout/widget_basic"
-    android:configure="com.tsaou.watchlistwidget.MainActivity"
     android:resizeMode="horizontal|vertical"
     android:widgetCategory="home_screen">
 </appwidget-provider>
