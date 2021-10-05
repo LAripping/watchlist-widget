@@ -68,12 +68,13 @@ There was never an app for that since IMDB does not (officially) provide an API 
 
 ## Roadmap
 
-- [ ] Single-screen App that allows CSV import (button #1 - action ), 
-  - [ ] saves it (`Provider`), backed by `Room`
-  - [x] lists some counters on main screen to validate 
+- [x] Single-screen App that allows CSV import (button #1 - action ), 
+  - [x] saves it (`Provider`), backed by `SQLiteDatabase`
+  - [x] lists a counter on main screen to validate 
     - [ ] (ideally) list titles in tiles with `CursorLoader`
 - [ ] ...and exposes  a bare widget 
 - [ ] (button #2 - 3dots) Widget settings -> `SettingsActivity`
+  - [ ] Clear all data
 - [ ] (button #3) Step-by-Step flow (initiated by same #1 action button - expanding 2nd option like LP) that 
   1. Spawns webview, loads IMDB
   2. prompts user to login

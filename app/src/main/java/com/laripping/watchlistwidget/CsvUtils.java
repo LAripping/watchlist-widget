@@ -48,15 +48,15 @@ public class CsvUtils {
             /*
              * Sets each column value (according to the CSV value) and inserts the title into the provider.
              */
-            newValues.put(Title.COLUMN_TITLE, csvLine.get(CSV_TITLE));
-            newValues.put(Title.COLUMN_CONST, csvLine.get(CSV_CONST));
-            newValues.put(Title.COLUMN_CREATED, csvLine.get(CSV_CREATED));
-            newValues.put(Title.COLUMN_DIRECTORS, csvLine.get(CSV_DIRECTORS));
-            newValues.put(Title.COLUMN_GENRES, csvLine.get(CSV_GENRES));
-            newValues.put(Title.COLUMN_RATING, csvLine.get(CSV_RATING));
-            newValues.put(Title.COLUMN_RUNTIME, csvLine.get(CSV_RUNTIME));
-            newValues.put(Title.COLUMN_TYPE, csvLine.get(CSV_TYPE));
-            newValues.put(Title.COLUMN_YEAR, csvLine.get(CSV_YEAR));
+            newValues.put(AppDatabaseSqlite.COLUMN_TITLE, csvLine.get(CSV_TITLE));
+            newValues.put(AppDatabaseSqlite.COLUMN_CONST, csvLine.get(CSV_CONST));
+            newValues.put(AppDatabaseSqlite.COLUMN_CREATED, csvLine.get(CSV_CREATED));
+            newValues.put(AppDatabaseSqlite.COLUMN_DIRECTORS, csvLine.get(CSV_DIRECTORS));
+            newValues.put(AppDatabaseSqlite.COLUMN_GENRES, csvLine.get(CSV_GENRES));
+            newValues.put(AppDatabaseSqlite.COLUMN_RATING, csvLine.get(CSV_RATING));
+            newValues.put(AppDatabaseSqlite.COLUMN_RUNTIME, csvLine.get(CSV_RUNTIME));
+            newValues.put(AppDatabaseSqlite.COLUMN_TYPE, csvLine.get(CSV_TYPE));
+            newValues.put(AppDatabaseSqlite.COLUMN_YEAR, csvLine.get(CSV_YEAR));
 
             // TODO check Const and don't add existing ones
 

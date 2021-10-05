@@ -47,7 +47,6 @@ public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration appBarConfiguration;
     private ActivityMainBinding binding;
-    private Throwable throwable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +71,18 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private void openFile() {
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType("*/*");      // TODO it's greyed out when text/csv
+
+        // Optionally, specify a URI for the file that should appear in the
+        // system file picker when it loads.
+//        intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, pickerInitialUri);
+
+        startActivityForResult(intent, PICK_CSV_FILE);
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode,
                                  Intent resultData) {
@@ -93,9 +104,7 @@ public class MainActivity extends AppCompatActivity {
 
                 int countProvider = getTitleCount();
 
-                Log.i(TAG,"File Parsed");
-                Log.i(TAG,"\tCount by provider: "+countProvider);
-                Log.i(TAG,"\tCount by var (and maybe Room): "+count);
+                Log.i(TAG,"File Parsed. Title Count: "+MainActivity.count);
 
                 TextView text = findViewById(R.id.textview_first);
                 text.setText("List opened! "+count+" titles");
@@ -105,15 +114,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private int getTitleCount() {
-        Cursor cursor = this.getContentResolver().query(
-                WatchlistProvider.CONTENT_URI,
-                new String[]{Title.COLUMN_TITLE},
-                null,
-                new String[]{""},
-                "_ID ASC");
-        return cursor.getCount();
-    }
 
     private void parseFileFromUri(Uri uri) throws IOException {
         try (InputStream inputStream = getContentResolver().openInputStream(uri);
@@ -123,18 +123,22 @@ public class MainActivity extends AppCompatActivity {
             CsvUtils csv = new CsvUtils(this);
             csv.parseCsvFile(reader);
 
-
-            AppDatabase database = AppDatabase.getInstance(this);
-            database.titleDao().count()
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(countRet -> {
-                                count = countRet;
-                                Log.i(TAG,"Count (Single): "+countRet);
-                            },
-                            throwable -> Log.e(TAG, "Unable to get count", throwable)
-                            );
+            // Ask the procider and update MainActivity's count
+            MainActivity.count = getTitleCount();
         }
+    }
+
+
+    private int getTitleCount() {
+        Cursor cursor = this.getContentResolver().query(
+                WatchlistProvider.CONTENT_URI,
+                AppDatabaseSqlite.ALL_COLUMNS,
+                null,
+                new String[]{""},
+                "_ID ASC");
+        int count = cursor.getCount();
+        Log.i(TAG, "Cursor returned " + count+ " rows");
+        return count;
     }
 
     @Override
@@ -168,15 +172,4 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    private void openFile() {
-        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-        intent.addCategory(Intent.CATEGORY_OPENABLE);
-        intent.setType("*/*");      // TODO it's greyed out when text/csv
-
-        // Optionally, specify a URI for the file that should appear in the
-        // system file picker when it loads.
-//        intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, pickerInitialUri);
-
-        startActivityForResult(intent, PICK_CSV_FILE);
-    }
 }
