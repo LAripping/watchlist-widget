@@ -22,4 +22,12 @@
     <style name="Theme.WatchlistWidget.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.WatchlistWidget.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="Theme.WatchlistWidget.AppWidgetContainerParent" parent="@android:style/Theme.DeviceDefault">
+        <item name="appWidgetRadius">8dp</item>
+        <item name="appWidgetPadding">4dp</item>
+        <item name="appWidgetInnerRadius">4dp</item>
+    </style>
+
+    <style name="Theme.WatchlistWidget.AppWidgetContainer" parent="Theme.WatchlistWidget.AppWidgetContainerParent" />
 </resources>

@@ -9,11 +9,39 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.WatchlistWidget">
+        <service
+            android:name=".WidgetService"
+            android:enabled="true"
+            android:exported="false"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
+
+        <receiver
+            android:name=".WatchlistWidget"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/watchlist_widget_info" />
+        </receiver>
+
+        <activity
+            android:name=".WatchlistWidgetConfigureActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+        </activity>
+
         <provider
             android:name=".WatchlistProvider"
             android:authorities="com.laripping.watchlistwidget"
             android:enabled="true"
-            android:exported="false"/>
+            android:exported="true" />
+<!--        exported otherwise we get SecurityException from widget trying to call it-->
+<!--        TODO add permission-->
 
         <activity
             android:name=".MainActivity"

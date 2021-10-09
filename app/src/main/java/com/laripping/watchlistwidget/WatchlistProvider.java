@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.SQLException;
+import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.text.TextUtils;
@@ -58,15 +59,20 @@ public class WatchlistProvider extends ContentProvider {
     @Override
     public Uri insert(Uri uri, ContentValues values) {
         if (uriMatcher.match(uri) == 1) {
-            long id = dbInstance.insert(AppDatabaseSqlite.TABLE_NAME, null, values);
-
-            if (id > 0) {
+            try{
+                long id = dbInstance.insertOrThrow(AppDatabaseSqlite.TABLE_NAME, null, values);
                 Uri ret_uri = ContentUris.withAppendedId(CONTENT_URI, id);
                 getContext().getContentResolver().notifyChange(ret_uri, null);
-
                 return ret_uri;
+            } catch (SQLException e) {
+                if(e.getClass() == SQLiteConstraintException.class){
+//                    getMessage().contains("UNIQUE constraint failed")){
+                    // all good, just an existing title in the DB
+                    Log.i(TAG,"Title with const="+values.getAsString(AppDatabaseSqlite.COLUMN_CONST)+" existed. Ignored");
+                } else{
+                    Log.e(TAG,"INSERT failed but not because of existing CONST!",e);
+                }
             }
-            throw new SQLException("Insertion Failed for URI :" + uri);
         }
         return null;
     }
@@ -81,7 +87,7 @@ public class WatchlistProvider extends ContentProvider {
     @Override
     public Cursor query(Uri uri, String[] projection, String selection,
                         String[] selectionArgs, String sortOrder) {
-
+        Log.d(TAG,"query() URI: "+uri);
         Cursor cursor = null;
         // If the incoming URI was for all of "titles" - sole case so far
         if (uriMatcher.match(uri) == 1) {

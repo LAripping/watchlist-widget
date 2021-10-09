@@ -68,17 +68,29 @@ There was never an app for that since IMDB does not (officially) provide an API 
 
 ## Roadmap
 
+#### Static Import
+
 - [x] Single-screen App that allows CSV import (button #1 - action ), 
   - [x] saves it (`Provider`), backed by `SQLiteDatabase`
   - [x] lists a counter on main screen to validate 
     - [ ] (ideally) list titles in tiles with `CursorLoader`
-- [ ] ...and exposes  a bare widget 
+- [x] ...and exposes  a bare `ListView`  widget 
 - [ ] (button #2 - 3dots) Widget settings -> `SettingsActivity`
   - [ ] Clear all data
+- [ ] Styling
+- [ ] TODOs and Error handling 
+
+#### Dynamic Download
+
 - [ ] (button #3) Step-by-Step flow (initiated by same #1 action button - expanding 2nd option like LP) that 
   1. Spawns webview, loads IMDB
   2. prompts user to login
   3. prompts user to download their watchlist
   4. Spawn file explorer & select CSV 
   5. import - "Voila! Now pick your widget" 
-- [ ] Widget-initiated-flow
+- [ ] Widget-initiated-flow with `ConfigActivity`
+- [ ] Implement different  [Widget types](https://developer.android.com/guide/topics/appwidgets/collections):
+  - [ ] List
+  - [ ] Grid
+  - [ ] Stack
+  - [ ] Flipper

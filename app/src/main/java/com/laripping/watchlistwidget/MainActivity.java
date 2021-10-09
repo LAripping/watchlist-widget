@@ -1,6 +1,7 @@
 package com.laripping.watchlistwidget;
 
 import android.app.Activity;
+import android.appwidget.AppWidgetManager;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -121,10 +122,13 @@ public class MainActivity extends AppCompatActivity {
                      new InputStreamReader(Objects.requireNonNull(inputStream))
              )) {
             CsvUtils csv = new CsvUtils(this);
+            // TODO add spinner here
             csv.parseCsvFile(reader);
 
-            // Ask the procider and update MainActivity's count
+            // Ask the provider and update MainActivity's count
             MainActivity.count = getTitleCount();
+
+            // TODO Also update the widget?
         }
     }
 
@@ -170,6 +174,12 @@ public class MainActivity extends AppCompatActivity {
                 || super.onSupportNavigateUp();
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        MainActivity.count = getTitleCount();
 
-
+        TextView text = findViewById(R.id.textview_first);
+        text.setText(count+" titles found in the database");
+    }
 }

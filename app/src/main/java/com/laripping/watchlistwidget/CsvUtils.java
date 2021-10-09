@@ -58,14 +58,30 @@ public class CsvUtils {
             newValues.put(AppDatabaseSqlite.COLUMN_TYPE, csvLine.get(CSV_TYPE));
             newValues.put(AppDatabaseSqlite.COLUMN_YEAR, csvLine.get(CSV_YEAR));
 
-            // TODO check Const and don't add existing ones
+            boolean existing = false;
+            Uri returi = null;
+            try{
+                 returi = this.context.getContentResolver().insert(
+                        WatchlistProvider.CONTENT_URI,
+                        newValues
+                );
+            } catch (Exception e) {
+                Log.d(TAG,"Provider's insert() threw Exception...");
+                existing = true;
+            }
+            if(returi==null){
+                Log.d(TAG,"Provider's insert() returned null URI...");
+                existing = true;
+            }
+            // in any case:
+            if(existing) {
+                Log.i(TAG, "Title existed in DB, Ignored");
+            } else {
+                Log.i(TAG, "Call to provider's insert() return URI:" + returi.toString());
+            }
 
-            Uri returi = this.context.getContentResolver().insert(
-                    WatchlistProvider.CONTENT_URI,
-                    newValues
-            );
-            Log.i(TAG,"Call to provider's insert() return URI:"+returi.toString());
-        }
-
+        } // while
     }
+
+
 }

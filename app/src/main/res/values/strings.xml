@@ -8,6 +8,12 @@
     <string name="previous">Previous</string>
 
     <string name="hello_first_fragment">No Titles! Add your watchlist by clicking the button below!</string>
-<!--    TODO iconify-->
+    <!--    TODO iconify-->
     <string name="hello_second_fragment">Hello second fragment.</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="configure">Configure</string>
+    <string name="add_widget">Add widget</string>
+    <string name="app_widget_description">The widget that will display your IMDb watchlist</string>
+    <string name="refresh">Refresh</string>
+    <string name="empty_view_text">No watchlist titles :(</string>
 </resources>
