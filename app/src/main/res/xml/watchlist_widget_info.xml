@@ -19,7 +19,7 @@
     android:minWidth="180dp"
     android:minHeight="110dp"
     android:previewImage="@mipmap/ic_launcher"
-    android:previewLayout="@layout/watchlist_widget_default"
+    android:previewLayout="@layout/watchlist_widget_list_layout"
     android:resizeMode="horizontal|vertical"
     android:targetCellWidth="3"
     android:targetCellHeight="2"

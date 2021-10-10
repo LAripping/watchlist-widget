@@ -28,7 +28,7 @@ public class CsvUtils {
     public static final String CSV_YEAR = "Year";
     public static final String CSV_GENRES = "Genres";
     public static final String CSV_DIRECTORS = "Directors";
-    public static final String TAG = "WWCsv";
+    public static final String TAG = "Csv";
 
     public Context context;
 

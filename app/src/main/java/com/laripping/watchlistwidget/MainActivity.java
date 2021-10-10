@@ -2,71 +2,54 @@ package com.laripping.watchlistwidget;
 
 import android.app.Activity;
 import android.appwidget.AppWidgetManager;
-import android.content.ContentValues;
-import android.content.Context;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import com.opencsv.CSVReader;
-
-
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.util.Log;
 import android.view.View;
-
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
-
-import com.laripping.watchlistwidget.databinding.ActivityMainBinding;
-import com.opencsv.CSVReaderHeaderAware;
-
+import com.laripping.watchlistwidget.databinding.ActivityMainMonolithicBinding;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
-
+import android.widget.Toast;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.Map;
 import java.util.Objects;
-
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity {
 
     // Request code for selecting a PDF document.
     private static final int PICK_CSV_FILE = 2;
-    public static final String TAG = "WWMain";
-    public static boolean loaded = false;
-    public static int count = 0;
+    public static final String TAG = "Main";
 
-    private AppBarConfiguration appBarConfiguration;
-    private ActivityMainBinding binding;
+    private ActivityMainMonolithicBinding binding;
+    private Counter mCounter;
+    private TextView mText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        // Bind the toolbar
+        binding = ActivityMainMonolithicBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
         setSupportActionBar(binding.toolbar);
 
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
-        appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
-        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+        // Set the UI counter
+        mCounter = new Counter(this,0);
+        mCounter.setCount(getTitleCount());
+        mText = findViewById(R.id.textview_first);
+        mText.setText(mCounter.getText());
 
+        // Bind the Floating Action Button
         binding.fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
                 openFile();
             }
         });
@@ -99,18 +82,7 @@ public class MainActivity extends AppCompatActivity {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
-                loaded = true;
-//                NavHostFragment.findNavController(SecondFragment.this).navigate(R.id.action_SecondFragment_to_FirstFragment);
-
-                int countProvider = getTitleCount();
-
-                Log.i(TAG,"File Parsed. Title Count: "+MainActivity.count);
-
-                TextView text = findViewById(R.id.textview_first);
-                text.setText("List opened! "+count+" titles");
-
-
+                updateCounterAndWidget();
             }
         }
     }
@@ -125,11 +97,21 @@ public class MainActivity extends AppCompatActivity {
             // TODO add spinner here
             csv.parseCsvFile(reader);
 
-            // Ask the provider and update MainActivity's count
-            MainActivity.count = getTitleCount();
-
-            // TODO Also update the widget?
+            Toast.makeText(this,
+                    "Watchlist file parsed!",
+                    Toast.LENGTH_SHORT
+            ).show();
         }
+    }
+
+    private void updateCounterAndWidget() {
+        Log.d(TAG,"Updating Counter and Widget");
+        mCounter.setCount(getTitleCount());
+        mText.setText(mCounter.getText());
+
+        AppWidgetManager mgr = AppWidgetManager.getInstance(this);
+        ComponentName cn = new ComponentName(this, WatchlistWidget.class);
+        mgr.notifyAppWidgetViewDataChanged(mgr.getAppWidgetIds(cn), R.id.title_list);
     }
 
 
@@ -161,25 +143,42 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Toast.makeText(this,
+                    "No settings at this time!",
+                    Toast.LENGTH_SHORT
+            ).show();
+            return true;
+        } else if (id == R.id.action_clear) {
+            int deleteCount = this.getContentResolver().delete(
+                    WatchlistProvider.CONTENT_URI,
+                    null,
+                    null);
+            Toast.makeText(this,
+                    "All "+deleteCount+" titles cleared!",
+                    Toast.LENGTH_SHORT
+            ).show();
+            updateCounterAndWidget();
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public boolean onSupportNavigateUp() {
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
-        return NavigationUI.navigateUp(navController, appBarConfiguration)
-                || super.onSupportNavigateUp();
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        MainActivity.count = getTitleCount();
-
-        TextView text = findViewById(R.id.textview_first);
-        text.setText(count+" titles found in the database");
-    }
+//    @Override
+//    public boolean onSupportNavigateUp() {
+//        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
+//        return NavigationUI.navigateUp(navController, appBarConfiguration)
+//                || super.onSupportNavigateUp();
+//    }
+//
+//    /**
+//     * Make sure to update the counter in the UI after the file has bee
+//     */
+//    @Override
+//    protected void onResume() {
+//        Log.d(TAG,"onResume()");
+//        mCounter.setCount(getTitleCount());
+//        mText.setText(mCounter.getText());
+//        super.onResume();
+//    }
 }

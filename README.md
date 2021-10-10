@@ -75,7 +75,8 @@ There was never an app for that since IMDB does not (officially) provide an API 
   - [x] lists a counter on main screen to validate 
     - [ ] (ideally) list titles in tiles with `CursorLoader`
 - [x] ...and exposes  a bare `ListView`  widget 
-- [ ] (button #2 - 3dots) Widget settings -> `SettingsActivity`
+  - [ ] (ideally) with fetched title icons if space / when resized
+- [ ] (button #2 - 3dots) Widget settings (`SettingsActivity` ?)
   - [ ] Clear all data
 - [ ] Styling
 - [ ] TODOs and Error handling 

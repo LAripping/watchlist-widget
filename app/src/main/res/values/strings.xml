@@ -1,13 +1,14 @@
 <resources>
     <string name="app_name">Watchlist Widget</string>
     <string name="action_settings">Settings</string>
+    <string name="action_clear">Clear Data</string>
     <!-- Strings used for fragments for navigation -->
     <string name="empty_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
 
-    <string name="hello_first_fragment">No Titles! Add your watchlist by clicking the button below!</string>
+    <string name="no_titles">No Titles! Add your watchlist by clicking the button below!</string>
     <!--    TODO iconify-->
     <string name="hello_second_fragment">Hello second fragment.</string>
     <string name="appwidget_text">EXAMPLE</string>
