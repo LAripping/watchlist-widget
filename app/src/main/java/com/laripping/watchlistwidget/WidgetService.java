@@ -103,28 +103,22 @@ public class WidgetService extends RemoteViewsService {
         @Override
         public RemoteViews getViewAt(int i) {
             Log.d(TAG,"getViewAt("+i+")");
-            String itemTitle;
-            String itemConst;
-            if (mCursor.moveToPosition(i)) {
-                int titleColIndex = mCursor.getColumnIndex(AppDatabaseSqlite.COLUMN_TITLE);
-                itemTitle = mCursor.getString(titleColIndex);
-                int constColIndex = mCursor.getColumnIndex(AppDatabaseSqlite.COLUMN_CONST);
-                itemConst = mCursor.getString(constColIndex);
-            } else {
+            if (!mCursor.moveToPosition(i))
                 Log.e(TAG,"Item not found at position "+i+"!");
-                itemTitle = "Unknown title!";
-                itemConst = "Unknown const!";
-            }
-
+            Title item = new Title(mCursor);
             // TODO add icon
-            int itemId = R.layout.watchlist_widget_list_item;
-            RemoteViews rv = new RemoteViews(mContext.getPackageName(), itemId);
-            rv.setTextViewText(R.id.widget_item, itemTitle);
+            RemoteViews rv = new RemoteViews(mContext.getPackageName(), R.layout.watchlist_widget_list_item);
+            String firstRow = String.format("%s (%d)", item.getTitle(), item.getYear());
+            String secondRow = String.format("%d' \u2022 %s",item.getRuntime(), item.getGenres());
+            String rating = String.format("%.1f",item.getRating());
+            rv.setTextViewText(R.id.widget_item_title, firstRow);
+            rv.setTextViewText(R.id.widget_item_subtitle, secondRow);
+            rv.setTextViewText(R.id.widget_item_rating, rating);
 
             // Set the click FillIntent (similar to the PendingIntent one) so that we can handle it in the provider's onReceive()
             Intent fillInIntent = new Intent();
             Bundle extras = new Bundle();
-            extras.putString(WatchlistWidget.EXTRA_CONST, itemConst);
+            extras.putString(WatchlistWidget.EXTRA_CONST, item.gettConst());
             fillInIntent.putExtras(extras);
             rv.setOnClickFillInIntent(R.id.widget_item, fillInIntent);
             return rv;

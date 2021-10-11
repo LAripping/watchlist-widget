@@ -16,5 +16,7 @@
     <string name="add_widget">Add widget</string>
     <string name="app_widget_description">The widget that will display your IMDb watchlist</string>
     <string name="refresh">Refresh</string>
-    <string name="empty_view_text">No watchlist titles :(</string>
+    <string name="empty_widget_text">No watchlist titles :(</string>
+    <string name="widget_header">Watch list</string>
+    <string name="content_description_imdb_logo">IMDB logo</string>
 </resources>

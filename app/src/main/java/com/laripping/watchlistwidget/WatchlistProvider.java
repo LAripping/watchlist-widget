@@ -3,7 +3,6 @@ package com.laripping.watchlistwidget;
 import android.content.ContentProvider;
 import android.content.ContentUris;
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.SQLException;
@@ -76,6 +75,13 @@ public class WatchlistProvider extends ContentProvider {
     public Uri insert(Uri uri, ContentValues values) {
         Log.d(TAG,"insert() URI: "+uri);
         if (uriMatcher.match(uri) == PATTERN_ALL) { // not technically an _ALL operation
+            Title.Type type = Enum.valueOf(Title.Type.class, values.getAsString(AppDatabaseSqlite.COLUMN_TYPE) );
+            if(type!=Title.Type.movie && type!=Title.Type.tvMovie){
+                // Design decision: We won't add series / mini series
+                // TODO parameterise this is in settings
+                Log.i(TAG,"Title "+values.getAsString(AppDatabaseSqlite.COLUMN_TITLE)+" was not a movie. Ignored");
+                return null;
+            }
             try{
                 long id = dbInstance.insertOrThrow(AppDatabaseSqlite.TABLE_NAME, null, values);
                 Uri ret_uri = ContentUris.withAppendedId(CONTENT_URI, id);

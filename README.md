@@ -77,8 +77,8 @@ There was never an app for that since IMDB does not (officially) provide an API 
 - [x] ...and exposes  a bare `ListView`  widget 
   - [ ] (ideally) with fetched title icons if space / when resized
 - [ ] (button #2 - 3dots) Widget settings (`SettingsActivity` ?)
-  - [ ] Clear all data
-- [ ] Styling
+  - [x] Clear all data
+- [x] Styling
 - [ ] TODOs and Error handling 
 
 #### Dynamic Download
