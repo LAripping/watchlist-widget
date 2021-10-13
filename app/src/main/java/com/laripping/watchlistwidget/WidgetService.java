@@ -4,11 +4,18 @@ import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.FutureTarget;
+import com.bumptech.glide.request.target.Target;
+
+import java.util.concurrent.ExecutionException;
 
 /**
  * This is the service through which a remote adapter can request RemoteViews.
@@ -106,7 +113,7 @@ public class WidgetService extends RemoteViewsService {
             if (!mCursor.moveToPosition(i))
                 Log.e(TAG,"Item not found at position "+i+"!");
             Title item = new Title(mCursor);
-            // TODO add icon
+
             RemoteViews rv = new RemoteViews(mContext.getPackageName(), R.layout.watchlist_widget_list_item);
             String firstRow = String.format("%s (%d)", item.getTitle(), item.getYear());
             String secondRow = String.format("%d' \u2022 %s",item.getRuntime(), item.getGenres());
@@ -114,6 +121,10 @@ public class WidgetService extends RemoteViewsService {
             rv.setTextViewText(R.id.widget_item_title, firstRow);
             rv.setTextViewText(R.id.widget_item_subtitle, secondRow);
             rv.setTextViewText(R.id.widget_item_rating, rating);
+            String posterUrl = String.format("https://img.omdbapi.com/?apikey=%s&i=%s",BuildConfig.OMDB_KEY,item.gettConst());
+
+//            new DownloadImageTask(rv, item.gettConst()).execute(posterUrl);
+            loadPoster(rv, posterUrl, item.gettConst());
 
             // Set the click FillIntent (similar to the PendingIntent one) so that we can handle it in the provider's onReceive()
             Intent fillInIntent = new Intent();
@@ -152,6 +163,22 @@ public class WidgetService extends RemoteViewsService {
         public boolean hasStableIds() {
             Log.d(TAG,"hasStableIds()");
             return false;
+        }
+
+        private void loadPoster(RemoteViews remoteViews, String url, String tconst) {
+            try {
+                Log.d(TAG,"Fetching URL for "+tconst+"...");
+                FutureTarget<Bitmap> submit = Glide
+                        .with(this.mContext)
+                        .asBitmap()
+                        .load(url)
+                        .submit(Target.SIZE_ORIGINAL,Target.SIZE_ORIGINAL);
+                remoteViews.setImageViewBitmap(R.id.widget_item_poster, submit.get());
+                Log.i(TAG,"Managed to set Bitmap for "+tconst);
+                Glide.with(this.mContext).clear(submit);
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

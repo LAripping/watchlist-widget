@@ -105,18 +105,6 @@ public class WatchlistWidget extends AppWidgetProvider {
         super.onUpdate(context, appWidgetManager, appWidgetIds);
     }
 
-
-    // TODO potential problem
-    // Because AppWidgetProvider is an extension of BroadcastReceiver,
-    // your process is not guaranteed to keep running after the callback methods return
-    // (see BroadcastReceiver for information about the broadcast lifecycle).
-    // If your widget setup process in onUpdate() can take several seconds
-    // (perhaps while performing web requests)
-    // and you require that your process continues,
-    // consider starting a Task using WorkManager in the onUpdate() method.
-    // From within the task, you can perform your own updates to the widget without worrying about
-    // the AppWidgetProvider closing down due to an Application Not Responding (ANR) error.
-
     /**
      * Creates the {@link RemoteViews RemoteViews} of the widget
      * ...called from onUpdate() / onAppWidgetOptionsChanged()

@@ -2,6 +2,11 @@ plugins {
     id 'com.android.application'
 }
 
+
+def apikeyPropertiesFile = rootProject.file("apikey.properties")
+def apikeyProperties = new Properties()
+apikeyProperties.load(new FileInputStream(apikeyPropertiesFile))
+
 android {
     compileSdk 31
 
@@ -11,7 +16,7 @@ android {
         targetSdk 31
         versionCode 1
         versionName "1.0"
-
+        buildConfigField("String", "OMDB_KEY", apikeyProperties['OMDB_KEY'])
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -33,6 +38,8 @@ android {
 dependencies {
     def room_version = "2.3.0"
     def rxjava2_version = "2.1.5"
+
+    implementation "com.github.bumptech.glide:glide:4.11.0"
 
     implementation "androidx.room:room-runtime:$room_version"
     annotationProcessor "androidx.room:room-compiler:$room_version"

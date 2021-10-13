@@ -42,7 +42,7 @@ public class AppDatabaseSqlite extends SQLiteOpenHelper {
                     COLUMN_DIRECTORS + " TEXT" +
                     ")";
 
-    //Delete Table TODO use in Settings -> Clear all button
+    //Delete Table, only when the schema is to be migrated (onUpgrade)
     private static final String DROP_TABLE =
             "DROP TABLE IF EXISTS " + TABLE_NAME;
 
