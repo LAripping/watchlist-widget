@@ -10,7 +10,11 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.laripping.watchlistwidget.databinding.ActivityMainMonolithicBinding;
+import com.nambimobile.widgets.efab.ExpandableFab;
+
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -47,10 +51,19 @@ public class MainActivity extends AppCompatActivity {
         mText.setText(mCounter.getText());
 
         // Bind the Floating Action Button
-        binding.fab.setOnClickListener(new View.OnClickListener() {
+//        binding.fab.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.faboption1_import).setOnClickListener(new View.OnClickListener()
+        {
             @Override
             public void onClick(View view) {
                 openFile();
+            }
+        });
+        findViewById(R.id.faboption2_url).setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view) {
+                // TODO prompt for the URL with a dialog - store URL and initParse
             }
         });
     }

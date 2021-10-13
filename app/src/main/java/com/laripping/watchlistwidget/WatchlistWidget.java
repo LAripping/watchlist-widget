@@ -265,16 +265,21 @@ public class WatchlistWidget extends AppWidgetProvider {
 //            final int appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
 //                    AppWidgetManager.INVALID_APPWIDGET_ID);
         } else if (action.equals(CLICK_ACTION)) {
-            // TODO open IMDB URL using the const from the intent
             int appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
                     AppWidgetManager.INVALID_APPWIDGET_ID);
             String clickedConst = intent.getStringExtra(WatchlistWidget.EXTRA_CONST);
-            // for now, just show a toast
-            Toast.makeText(
-                    context,
-                    "Clicked title "+clickedConst+" on Widget #"+appWidgetId+". Not yet implemented!",
-                    Toast.LENGTH_SHORT
-            ).show();
+
+            String imdbUrl = String.format("https://www.imdb.com/title/%s/",clickedConst);
+            Intent i = new Intent(Intent.ACTION_VIEW);
+            i.setData(Uri.parse(imdbUrl));
+            context.startActivity(i);
+
+//            // for now, just show a toast
+//            Toast.makeText(
+//                    context,
+//                    "Clicked title "+clickedConst+" on Widget #"+appWidgetId+". Not yet implemented!",
+//                    Toast.LENGTH_SHORT
+//            ).show();
         }
         super.onReceive(context, intent);
     }

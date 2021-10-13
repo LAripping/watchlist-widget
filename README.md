@@ -4,16 +4,17 @@
 
 > An android app that beatifully displays a user's watchlist and has a home screen widget for it too!> 
 
-In every Android's I've ever owned, I would always make room in one of the home screens for movies, as a go-to place for when I want to chill and enjoy a film, populating it with all the relevant apps and widgets. What's always annoyingly missing is a cool widget to list my options and remind of good movies I've noted. Of course, like million other users, I use my **IMDB** watchlist for this purpose... but the IMDB App doesn't offer a Widget to display any list.
+In every Android's I've ever owned, I would always make room in one of the home screens for movies, as a go-to place for when I want to chill and enjoy a film, populating it with all the relevant apps and widgets. What's always annoyingly missing is a cool widget to list my options and remind of good movies I've noted. Of course, like millions other users, I use my **IMDB** watchlist for this purpose... but the IMDB App doesn't offer a Widget to display any list.
 
 This app aims to bridge that gap. Simplistic, and heavily inspired by "[TV Time](https://www.tvtime.com/)" (formerly "TV Show Time") - another excellent app (*which as of recently supports tracking Movies as well!*). It uses:
 
-* [OMDB API](http://www.omdbapi.com/) for fetching posters, see [Compiling](#Compiling) for instructions on how to get your free API key and bundle within the app 
+* [OMDB API](http://www.omdbapi.com/) for fetching posters, the [Usage Instructions](#usage-instructions) for instructions on how to get your free API key and bundle within the app 
 * [Gllide](https://github.com/bumptech/glide) image loading and caching library
+* [Expandable-fab](https://github.com/nambicompany/expendable-fab) library to pump up my Floating Action Button
 
 
 
-### Disclaimer :warning:
+### Disclaimers :warning:
 
 This is a free time hobby, I'm not a dev - I'm a security consultant and while I'd like to see people using my app and maybe take a glimpse of the support lifecycle, take this repo as it is:
 
@@ -35,9 +36,9 @@ This is a free time hobby, I'm not a dev - I'm a security consultant and while I
 
 - [ ] **Coming Soon!** :hourglass: Pointing to a *public* IMDB Watchlist to track
 
-- [x] Placing fancy, scrollable widgets on your home screen (pics below!)
+- [x] Placing fancy, scrollable widgets on your home screen (pics below)
 
-- [ ] Clicking titles to get to the IMDB page
+- [x] Clicking titles to get to the IMDB page
 
   | List Widget                 | Grid Widget | Stack Widget |
   | --------------------------- | ----------- | ------------ |
@@ -47,7 +48,7 @@ This is a free time hobby, I'm not a dev - I'm a security consultant and while I
 
 
 
-## Compiling
+## Usage Instructions
 
 1. Clone the project and load into Android Studio
 
@@ -59,7 +60,14 @@ This is a free time hobby, I'm not a dev - I'm a security consultant and while I
    OMDB_KEY="XXXXXXXXX"
    ```
 
-4. Build and run as usual 
+4. Build as usual 
+
+5. Launch app and now you have 2 ways to add watchlist titles:
+
+   * Export your IMDB watchlist as a CSV file, download to the device, and select it through the "Import" functionality
+   * Make your IMDB watchlist public (by following the official IMDB guidance on the relevant [FAQ](https://help.imdb.com/article/imdb/track-movies-tv/watchlist-faq/G9PA556494DM8YBA#)) and provide the URL in the "Point to URL"  functionality
+
+6. Place a widget on your screen and chill :popcorn::popcorn:
 
 
 
@@ -76,10 +84,11 @@ This is a free time hobby, I'm not a dev - I'm a security consultant and while I
 - [ ] (button #2 - 3dots) Widget settings (`SettingsActivity` ?)
   - [x] Clear all data
 - [x] Styling
+- [x] Click widget item to open IMDB url
 
 #### Dynamic Tracking
 
-- [ ] FAB Expand action like LastPass?
+- [x] FAB Expand action like LastPass?
   * original button will become just ":heavy_plus_sign:"
   * expanded options are " :mag:" for static import and ":globe_with_meridians:" for URL 
   * [ ] maybe with disclaimer that list needs to be made "public" and pointer to IMDB FAQs
