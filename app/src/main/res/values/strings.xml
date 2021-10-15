@@ -19,4 +19,11 @@
     <string name="empty_widget_text">No watchlist titles :(</string>
     <string name="widget_header">Watch list</string>
     <string name="content_description_imdb_logo">IMDB logo</string>
+    <string name="dialog_no">Cancel</string>
+    <string name="dialog_yes">Confirm</string>
+    <string name="dialog_header">Provide the IMDB list URL</string>
+    <string name="dialog_url_hint">https://www.imdb.com/list/...</string>
+    <string name="dialog_info">This will clear currently loaded titles</string>
+    <string name="dialog_private_problem">This IMDB list does not appear to be public. Change privacy and try again</string>
+    <string name="dialog_private_link"><a href="https://help.imdb.com/article/imdb/track-movies-tv/watchlist-faq/G9PA556494DM8YBA">IMDB Watchlist FAQ</a></string>
 </resources>

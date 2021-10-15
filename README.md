@@ -11,6 +11,7 @@ This app aims to bridge that gap. Simplistic, and heavily inspired by "[TV Time]
 * [OMDB API](http://www.omdbapi.com/) for fetching posters, the [Usage Instructions](#usage-instructions) for instructions on how to get your free API key and bundle within the app 
 * [Gllide](https://github.com/bumptech/glide) image loading and caching library
 * [Expandable-fab](https://github.com/nambicompany/expendable-fab) library to pump up my Floating Action Button
+* OkHttp client for fetching IMDB lists 
 
 
 
@@ -40,6 +41,8 @@ This is a free time hobby, I'm not a dev - I'm a security consultant and while I
 
 - [x] Clicking titles to get to the IMDB page
 
+- [ ] **Coming Soon!** :hourglass: Pull down main app screen to manually refresh widget from tracked IMDB list 
+
   | List Widget                 | Grid Widget | Stack Widget |
   | --------------------------- | ----------- | ------------ |
   | ![](listwidget-cropped.jpg) |             |              |
@@ -60,7 +63,7 @@ This is a free time hobby, I'm not a dev - I'm a security consultant and while I
    OMDB_KEY="XXXXXXXXX"
    ```
 
-4. Build as usual 
+4. Build as usual and side-load to device (or just enable USB debugging)
 
 5. Launch app and now you have 2 ways to add watchlist titles:
 
@@ -73,27 +76,32 @@ This is a free time hobby, I'm not a dev - I'm a security consultant and while I
 
 ## Roadmap
 
-#### Static Import
-
 - [x] Single-screen App that allows CSV import (button #1 - action ), 
   - [x] saves it (`Provider`), backed by `SQLiteDatabase`
   - [x] lists a counter on main screen to validate 
-    - [ ] on Main Screen display a collage/tiling of titles' posters, fading towards the Status ("Empty"/"N titles")
 - [x] ...and exposes  a bare `ListView`  widget 
   - [x] (ideally) with fetched title icons if space / when resized
 - [ ] (button #2 - 3dots) Widget settings (`SettingsActivity` ?)
   - [x] Clear all data
-- [x] Styling
+  - [ ] Refresh (from list) ...maybe on `Service`/`AsyncTask`?
+    - [ ] periodic widget auto-refresh, from either URL(using the AsyncTask) if any, else asking the provider 
+  - [ ] About -> Activity with Github link for updates
+  - [ ] Option to hide app icon
+- [x] Styling Round #1
 - [x] Click widget item to open IMDB url
-
-#### Dynamic Tracking
 
 - [x] FAB Expand action like LastPass?
   * original button will become just ":heavy_plus_sign:"
   * expanded options are " :mag:" for static import and ":globe_with_meridians:" for URL 
-  * [ ] maybe with disclaimer that list needs to be made "public" and pointer to IMDB FAQs
-  * [ ] URL prompt -> loader -> loaded! 
+  * [x] URL prompt (:information_source: this will clear your current database)-> loader -> loaded! 
+  * [ ] (if failed) Possible cause: list needs to be made "public"  (pointer to IMDB FAQs)
 - [ ] Widget-initiated-flow with `ConfigActivity`
+- [ ] Styling Round #2 - Main Screen
+  - [ ] display a collage/tiling of titles' posters, below the Status ("Empty"/"N titles"), fading towards the FAB 
+  - [ ] show List (Name?) currently traced
+  - [ ] Pull Down to Refresh (+prompt)
+- [ ] manual widget refresh (via Icon) on the widget, to  skips app launch
+- [ ] Spinners and Loading TODOs
 - [ ] TODOs and Error handling 
 - [ ] Implement different  [Widget types](https://developer.android.com/guide/topics/appwidgets/collections):
   - [x] List

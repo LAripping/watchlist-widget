@@ -202,8 +202,8 @@ public class WatchlistWidget extends AppWidgetProvider {
     /**
      * Generically called when the widget's underlying Receiver is triggered. Implemented here to handle 2 custom actions
      * Might be followed by a call to onUpdate (data update) / onAppWidgetOptionsChanged (resize)
-     * 1. REFRESH_ACTION : the data held by the Provider (hence the DB) are changed -> TODO code the firing of the REFRESH_ACTION (...in the button listeners)
-     * 2. CLICK_ACTION : an item of the widget is clicked  -> TODO code the firing of CLICK_ACTION (...in the button listeners)
+     * 1. REFRESH_ACTION : the data held by the Provider (hence the DB) are changed - NOT CURRENTLY USED
+     * 2. CLICK_ACTION : an item of the widget is clicked
      *
      * @param context
      * @param intent The intent received by the underlying BroadcastReceiver

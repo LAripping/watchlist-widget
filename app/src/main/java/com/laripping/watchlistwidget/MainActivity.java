@@ -4,16 +4,15 @@ import android.app.Activity;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Intent;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
+
 import android.util.Log;
 import android.view.View;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.laripping.watchlistwidget.databinding.ActivityMainMonolithicBinding;
-import com.nambimobile.widgets.efab.ExpandableFab;
 
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,14 +24,14 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Objects;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements URLDialog.OnCompleteListener {
 
     // Request code for selecting a PDF document.
     private static final int PICK_CSV_FILE = 2;
     public static final String TAG = "Main";
 
     private ActivityMainMonolithicBinding binding;
-    private Counter mCounter;
+    private AppState mAppState;
     private TextView mText;
 
     @Override
@@ -45,10 +44,9 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(binding.toolbar);
 
         // Set the UI counter
-        mCounter = new Counter(this,0);
-        mCounter.setCount(getTitleCount());
+        mAppState = new AppState(this);
         mText = findViewById(R.id.textview_first);
-        mText.setText(mCounter.getText());
+        mText.setText(mAppState.getStatus());
 
         // Bind the Floating Action Button
 //        binding.fab.setOnClickListener(new View.OnClickListener() {
@@ -63,7 +61,9 @@ public class MainActivity extends AppCompatActivity {
         {
             @Override
             public void onClick(View view) {
-                // TODO prompt for the URL with a dialog - store URL and initParse
+                DialogFragment dialog = new URLDialog();
+                dialog.show(getSupportFragmentManager(), "urldialog");
+                //  store URL and initParse
             }
         });
     }
@@ -118,9 +118,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateCounterAndWidget() {
-        Log.d(TAG,"Updating Counter and Widget");
-        mCounter.setCount(getTitleCount());
-        mText.setText(mCounter.getText());
+        Log.d(TAG,"Updating UI Counter and Widget");
+        mText.setText(mAppState.getStatus());
 
         AppWidgetManager mgr = AppWidgetManager.getInstance(this);
         ComponentName cn = new ComponentName(this, WatchlistWidget.class);
@@ -128,17 +127,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private int getTitleCount() {
-        Cursor cursor = this.getContentResolver().query(
-                WatchlistProvider.CONTENT_URI,
-                AppDatabaseSqlite.ALL_COLUMNS,
-                null,
-                new String[]{""},
-                "_ID ASC");
-        int count = cursor.getCount();
-        Log.i(TAG, "Cursor returned " + count+ " rows");
-        return count;
-    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -184,14 +173,28 @@ public class MainActivity extends AppCompatActivity {
 //                || super.onSupportNavigateUp();
 //    }
 //
-//    /**
-//     * Make sure to update the counter in the UI after the file has bee
-//     */
-//    @Override
-//    protected void onResume() {
-//        Log.d(TAG,"onResume()");
-//        mCounter.setCount(getTitleCount());
-//        mText.setText(mCounter.getText());
-//        super.onResume();
-//    }
+    /**
+     * Make sure to update the counter in the UI whenever the activity is brought back into the foreground (e.g. after a dialog)
+     */
+    @Override
+    protected void onResume() {
+        Log.d(TAG,"onResume() - Updating UI Counter");
+        mText.setText(mAppState.getStatus());
+        super.onResume();
+    }
+
+
+    /**
+     * Implement this to capture the signal emitted from the URLDialog
+     * @param success
+     */
+    @Override
+    public void onComplete(boolean success) {
+        if(success){
+            Log.d(TAG,"onComplete() - succeeded! Updating UI Counter");
+            mText.setText(mAppState.getStatus());
+        } else {
+            Log.d(TAG,"onComplete() - failed! Not changing anything");
+        }
+    }
 }
