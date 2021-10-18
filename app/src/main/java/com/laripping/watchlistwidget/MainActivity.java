@@ -3,11 +3,19 @@ package com.laripping.watchlistwidget;
 import android.app.Activity;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
+import androidx.work.Constraints;
+import androidx.work.Data;
+import androidx.work.ExistingPeriodicWorkPolicy;
+import androidx.work.NetworkType;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
 
 import android.util.Log;
 import android.view.View;
@@ -23,12 +31,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity implements URLDialog.OnCompleteListener {
 
     // Request code for selecting a PDF document.
     private static final int PICK_CSV_FILE = 2;
     public static final String TAG = "Main";
+
 
     private ActivityMainMonolithicBinding binding;
     private AppState mAppState;
@@ -143,7 +153,6 @@ public class MainActivity extends AppCompatActivity implements URLDialog.OnCompl
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             Toast.makeText(this,
                     "No settings at this time!",
@@ -155,8 +164,23 @@ public class MainActivity extends AppCompatActivity implements URLDialog.OnCompl
                     WatchlistProvider.CONTENT_URI,
                     null,
                     null);
+            StringBuilder toastBuilder = new StringBuilder().append("\u2713 All "+deleteCount+" titles cleared");
+
+            if(mAppState.getListUrl()!=null){
+                SharedPreferences.Editor editor = getSharedPreferences(AppState.PREF_FILE_NAME, Context.MODE_PRIVATE).edit();
+                editor.remove(AppState.PREF_LIST_KEY);
+                editor.commit();
+                toastBuilder.append("\n\u2713 Not tracking IMDB list any more");
+                // calling apply() would do this async, risking a race condition on the immediately upcoming
+                // getState() -> Prefs.getString() which would show stale prefs. Let's see if that has an
+                // impact on the main thread
+
+                WorkManager.getInstance(this).cancelUniqueWork(RefreshWorker.WORK_NAME);
+                toastBuilder.append("\n\u2713 Periodic watchlist refresh canceled");
+            }
+
             Toast.makeText(this,
-                    "All "+deleteCount+" titles cleared!",
+                    toastBuilder.toString(),
                     Toast.LENGTH_SHORT
             ).show();
             updateCounterAndWidget();
@@ -185,7 +209,7 @@ public class MainActivity extends AppCompatActivity implements URLDialog.OnCompl
 
 
     /**
-     * Implement this to capture the signal emitted from the URLDialog
+     * Implement this to capture the signal emitted after the finish of the {@link ImdbListTask ImdbListTask}
      * @param success
      */
     @Override
@@ -193,8 +217,38 @@ public class MainActivity extends AppCompatActivity implements URLDialog.OnCompl
         if(success){
             Log.d(TAG,"onComplete() - succeeded! Updating UI Counter");
             mText.setText(mAppState.getStatus());
+
+            // schedule the periodic refresh of this list
+            schedulePeriodicRefreshWorker();
+
         } else {
             Log.d(TAG,"onComplete() - failed! Not changing anything");
         }
+    }
+
+    private void schedulePeriodicRefreshWorker() {
+        Constraints constraints = new Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.UNMETERED)                  // only over Wifi
+                .setRequiresBatteryNotLow(true)                                 // only when there's enough juice
+                .build();
+        PeriodicWorkRequest refreshWorkRequest = new PeriodicWorkRequest
+                .Builder(RefreshWorker.class, 1, TimeUnit.DAYS)     // refresh watchlist once a day
+                .setConstraints(constraints)
+                .setInitialDelay(12, TimeUnit.HOURS)                    // it's fine if first refresh is after 12h
+//                    .setBackoffCriteria(                                          // no retry conditions currently in-place
+//                            BackoffPolicy.LINEAR,
+//                            OneTimeWorkRequest.MIN_BACKOFF_MILLIS,
+//                            TimeUnit.MILLISECONDS)
+                .setInputData(                                                  // pass it the List URL - can't we get this from shared prefs in doWork()?
+                        new Data.Builder()
+                                .putString(RefreshWorker.DATA_KEY_LIST_URL, mAppState.getListUrl())
+                                .build()
+                )
+                .build();
+        WorkManager.getInstance(this)
+                .enqueueUniquePeriodicWork(                                     // make sure there's only one work scheduled at any time
+                        RefreshWorker.WORK_NAME,
+                        ExistingPeriodicWorkPolicy.REPLACE,                     // but if I mess this up, keep the latest one as active
+                        refreshWorkRequest);
     }
 }

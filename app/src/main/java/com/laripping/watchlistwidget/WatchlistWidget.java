@@ -87,7 +87,7 @@ public class WatchlistWidget extends AppWidgetProvider {
     /**
      * Called when the widget provider is asked to provide the {@link RemoteViews RemoteViews} of the widget
      * - AppWidgetManager#ACTION_APPWIDGET_UPDATE : widget created (if no ConfigActivity) / update interval elapsed / system boot
-     * - AppWidgetManager#ACTION_APPWIDGET_RESTORED
+     * - AppWidgetManager#ACTION_APPWIDGET_RESTORED : widget re-created from backup -> not supported by this app
      * Updates the {@link RemoteViews RemoteViews} of each widget, through the {@link AppWidgetManager AppWidgetManager} APIs
      *
      * @param context

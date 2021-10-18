@@ -34,7 +34,7 @@ public class AppState {
     /**
      * @return The list's URL if one is tracked, or Null
      */
-    private String getListUrl() {
+    public String getListUrl() {
         return context
                 .getSharedPreferences(PREF_FILE_NAME, Context.MODE_PRIVATE)
                 .getString(PREF_LIST_KEY,null);

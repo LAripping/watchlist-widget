@@ -36,11 +36,14 @@ android {
 }
 
 dependencies {
+    implementation 'org.chromium.net:cronet-embedded:94.4606.61'
     def room_version = "2.3.0"
+    def work_version = "2.7.0"
     def rxjava2_version = "2.1.5"
 
     implementation "com.github.bumptech.glide:glide:4.11.0"
 
+    implementation "androidx.work:work-runtime:$work_version"
     implementation "androidx.room:room-runtime:$room_version"
     annotationProcessor "androidx.room:room-compiler:$room_version"
 

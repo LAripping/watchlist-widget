@@ -81,12 +81,16 @@ This is a free time hobby, I'm not a dev - I'm a security consultant and while I
   - [x] lists a counter on main screen to validate 
 - [x] ...and exposes  a bare `ListView`  widget 
   - [x] (ideally) with fetched title icons if space / when resized
-- [ ] (button #2 - 3dots) Widget settings (`SettingsActivity` ?)
+- [ ] (button #2 - 3dots) Widget settings 
   - [x] Clear all data
-  - [ ] Refresh (from list) ...maybe on `Service`/`AsyncTask`?
-    - [ ] periodic widget auto-refresh, from either URL(using the AsyncTask) if any, else asking the provider 
-  - [ ] About -> Activity with Github link for updates
-  - [ ] Option to hide app icon
+  - [x] **Refresh** (from list)
+    - [x] **periodic widget auto-refresh**,from the provider - obeys the `update interval` in the XML
+  - [ ] About ->
+    - [ ] `AboutActivity` with Github link for updates, Version (/ commit hash + date)
+  - [ ] Settings -> `SettingsActivity` 
+    - [ ] Auto-refresh interval - Subtitle: Last Refresh
+    - [ ] Option to hide app icon
+    - [ ] Untrack list (greyed out if not tracking)
 - [x] Styling Round #1
 - [x] Click widget item to open IMDB url
 
@@ -94,12 +98,12 @@ This is a free time hobby, I'm not a dev - I'm a security consultant and while I
   * original button will become just ":heavy_plus_sign:"
   * expanded options are " :mag:" for static import and ":globe_with_meridians:" for URL 
   * [x] URL prompt (:information_source: this will clear your current database)-> loader -> loaded! 
-  * [ ] (if failed) Possible cause: list needs to be made "public"  (pointer to IMDB FAQs)
+  * [x] (if failed) Possible cause: list needs to be made "public"  (pointer to IMDB FAQs)
 - [ ] Widget-initiated-flow with `ConfigActivity`
 - [ ] Styling Round #2 - Main Screen
   - [ ] display a collage/tiling of titles' posters, below the Status ("Empty"/"N titles"), fading towards the FAB 
   - [ ] show List (Name?) currently traced
-  - [ ] Pull Down to Refresh (+prompt)
+  - [ ] **Pull Down to Refresh** (+hint)
 - [ ] manual widget refresh (via Icon) on the widget, to  skips app launch
 - [ ] Spinners and Loading TODOs
 - [ ] TODOs and Error handling 

@@ -26,6 +26,13 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
+/**
+ * Used to update the local watchlist when initially pointing to an IMDB list
+ *
+ * It's working alright and currently convenient,
+ * but the code's duplicated in the {@link RefreshWorker WorkerThread}
+ * so TODO try replacing with an immediate Worker to re-use same code
+ */
 public class ImdbListTask extends AsyncTask<Integer,Integer,Integer> {
     private final Context mContext;
     private URLDialog.OnCompleteListener mListener;
@@ -126,7 +133,7 @@ public class ImdbListTask extends AsyncTask<Integer,Integer,Integer> {
                 InputStream inputStream = exportResponse.body().byteStream();
                 BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
                 CsvUtils csv = new CsvUtils(mContext);
-                csv.parseCsvFile(reader);
+                csv.parseCsvFile(reader);       // encapsulates the provider.insert()
             } catch (IOException e) {
                 e.printStackTrace();
                 return RESULT_CODE_CSV_PARSER;
@@ -142,7 +149,7 @@ public class ImdbListTask extends AsyncTask<Integer,Integer,Integer> {
     }
 
     protected void onProgressUpdate(Integer... progress) {
-            // TODO update Spinner with progress[0] (0-100%)
+            // TODO update Spinner/notification with progress[0] (0-100%)
     }
 
 
