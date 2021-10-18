@@ -8,7 +8,7 @@
     <string name="next">Next</string>
     <string name="previous">Previous</string>
 
-    <string name="no_titles">No Titles! Add your watchlist by clicking the button below!</string>
+    <string name="no_titles">Your watchlist is empty! Add titles by clicking the button below!</string>
     <!--    TODO iconify-->
     <string name="hello_second_fragment">Hello second fragment.</string>
     <string name="appwidget_text">EXAMPLE</string>
@@ -26,4 +26,5 @@
     <string name="dialog_info">This will clear currently loaded titles</string>
     <string name="dialog_private_problem">This IMDB list does not appear to be public. Change privacy and try again</string>
     <string name="dialog_private_link"><a href="https://help.imdb.com/article/imdb/track-movies-tv/watchlist-faq/G9PA556494DM8YBA">IMDB Watchlist FAQ</a></string>
+    <string name="action_refresh">Refresh</string>
 </resources>

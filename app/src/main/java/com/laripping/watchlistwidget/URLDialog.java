@@ -28,7 +28,7 @@ import okhttp3.Response;
 
 public class URLDialog extends DialogFragment {
     private static final String TAG = "URLDialog";
-    private OnCompleteListener mListener;
+    private OnTaskCompleteListener mListener;
 
 
     @Override
@@ -50,7 +50,7 @@ public class URLDialog extends DialogFragment {
                                 .edit();
                         editor.putString(AppState.PREF_LIST_KEY, urlEditText.getText().toString());
                         editor.apply();
-                        new ImdbListTask(getContext(),mListener).execute(ImdbListTask.TASK_CODE_INIT);
+                        new ImdbListTask(getContext(),mListener).execute();
                     }
                 })
                 .setNegativeButton(R.string.dialog_no, new DialogInterface.OnClickListener() {
@@ -66,13 +66,6 @@ public class URLDialog extends DialogFragment {
 
 
     /**
-     * The Interface that MainActivity will implement, to pass back a signal from the dialog
-     */
-    public static interface OnCompleteListener {
-        public abstract void onComplete(boolean success);
-    }
-
-    /**
      * Make sure MainActivity has implemented the interface, to receive the dialog signal
      * @param context
      */
@@ -80,9 +73,9 @@ public class URLDialog extends DialogFragment {
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         try {
-            this.mListener = (OnCompleteListener)context;
+            this.mListener = (OnTaskCompleteListener)context;
         } catch(ClassCastException e){
-            Log.e(TAG, "Looks like the activity hasn't implemented the interface!");
+            Log.e(TAG, "The fragment's underlying activity hasn't implemented the interface!");
         }
     }
 }

@@ -25,10 +25,15 @@ public class AppState {
     public String getStatus() {
         int count = getTitleCount();
         Log.d(TAG,"getStatus() - count: "+ count);
-        if(count >0)
-            return count +" titles found in the database";
-        else
+        if(count >0){
+            if(getListUrl()==null){
+                return count +" titles imported";
+            } else {
+                return String.format("Tracking list containing %d titles", count);
+            }
+        } else {
             return this.context.getResources().getString(R.string.no_titles);
+        }
     }
 
     /**

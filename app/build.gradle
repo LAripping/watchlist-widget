@@ -37,6 +37,7 @@ android {
 
 dependencies {
     implementation 'org.chromium.net:cronet-embedded:94.4606.61'
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
     def room_version = "2.3.0"
     def work_version = "2.7.0"
     def rxjava2_version = "2.1.5"

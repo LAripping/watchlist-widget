@@ -17,6 +17,8 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -33,10 +35,11 @@ import okhttp3.Response;
  * but the code's duplicated in the {@link RefreshWorker WorkerThread}
  * so TODO try replacing with an immediate Worker to re-use same code
  */
-public class ImdbListTask extends AsyncTask<Integer,Integer,Integer> {
-    private final Context mContext;
-    private URLDialog.OnCompleteListener mListener;
-    private final OkHttpClient mClient;
+public class ImdbListTask extends AsyncTask<Void,Integer,Integer> {
+    private Context mContext;
+    private OnTaskCompleteListener mListener;
+    private OkHttpClient mClient;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     private static final String TAG = "ImdbListTask";
     private static final String faq = "https://help.imdb.com/article/imdb/track-movies-tv/watchlist-faq/G9PA556494DM8YBA";
@@ -46,16 +49,24 @@ public class ImdbListTask extends AsyncTask<Integer,Integer,Integer> {
     private static final int RESULT_CODE_UNKNOWN = 2;
     private static final int RESULT_CODE_NETWORK_ERROR = 3;
     private static final int RESULT_CODE_CSV_PARSER = 4;
+//
+//    public static final int TASK_CODE_INIT = 0;
+//    public static final int TASK_CODE_REFRESH = 1;
 
-    public static final int TASK_CODE_INIT = 0;
-    public static final int TASK_CODE_REFRESH = 1;
 
-
-    public ImdbListTask(Context context, URLDialog.OnCompleteListener listener){
+    public ImdbListTask(Context context, OnTaskCompleteListener listener){
         mContext = context;
         mClient = new OkHttpClient();
         mListener = listener;
     }
+
+    public ImdbListTask(Context context, OnTaskCompleteListener listener, SwipeRefreshLayout srl) {
+        mContext = context;
+        mClient = new OkHttpClient();
+        mListener = listener;
+        mSwipeRefreshLayout = srl;
+    }
+
 
     /**
      *
@@ -65,8 +76,7 @@ public class ImdbListTask extends AsyncTask<Integer,Integer,Integer> {
      *
      */
     @Override
-    protected Integer doInBackground(Integer... taskCodes) {
-        if(taskCodes[0]==TASK_CODE_INIT) {
+    protected Integer doInBackground(Void... params) {
 
             String listUrl = mContext
                     .getSharedPreferences(AppState.PREF_FILE_NAME, Context.MODE_PRIVATE)
@@ -142,10 +152,7 @@ public class ImdbListTask extends AsyncTask<Integer,Integer,Integer> {
             Log.i(TAG,"doInBackground() finished with no errors");
             publishProgress(100);  // leads to an invocation of onProgressUpdate()
             return RESULT_CODE_SUCCESS;
-        } else {
-            // TODO TASK_CODE_REFRESH
-            return 0;
-        }
+
     }
 
     protected void onProgressUpdate(Integer... progress) {
@@ -200,7 +207,7 @@ public class ImdbListTask extends AsyncTask<Integer,Integer,Integer> {
                             })
                             .setPositiveButton("Retry", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
-                                    new ImdbListTask(mContext, mListener).execute(ImdbListTask.TASK_CODE_INIT);
+                                    new ImdbListTask(mContext, mListener).execute();
                                 }})
                             .create()
                             .show();
@@ -236,5 +243,14 @@ public class ImdbListTask extends AsyncTask<Integer,Integer,Integer> {
                             .show();
                     break;
             }
+        if(mSwipeRefreshLayout==null) {
+            Log.d(TAG, "No Refresh layouts involved");
+        } else {
+            if(! mSwipeRefreshLayout.isRefreshing()){
+                Log.d(TAG,"Was not refreshing");
+            } else {
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+        }
     }
 }

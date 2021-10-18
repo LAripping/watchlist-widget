@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.work.Constraints;
 import androidx.work.Data;
 import androidx.work.ExistingPeriodicWorkPolicy;
@@ -33,7 +34,7 @@ import java.io.InputStreamReader;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
-public class MainActivity extends AppCompatActivity implements URLDialog.OnCompleteListener {
+public class MainActivity extends AppCompatActivity implements OnTaskCompleteListener {
 
     // Request code for selecting a PDF document.
     private static final int PICK_CSV_FILE = 2;
@@ -43,6 +44,8 @@ public class MainActivity extends AppCompatActivity implements URLDialog.OnCompl
     private ActivityMainMonolithicBinding binding;
     private AppState mAppState;
     private TextView mText;
+    private OnTaskCompleteListener mListener;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +79,27 @@ public class MainActivity extends AppCompatActivity implements URLDialog.OnCompl
                 //  store URL and initParse
             }
         });
+
+        // Get the SwipeRefreshLayout ref, to call setRefreshing() upon
+        mSwipeRefreshLayout=findViewById(R.id.swiperefresh);
+        if(mSwipeRefreshLayout==null){
+            Log.e(TAG,"MSL null!");
+        }
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                Log.d(TAG,"onRefresh()");
+                manualRefresh();
+            }
+        });
+
+        // We implement the interface ourselves, to have the callback invoked when the task finishes
+        try {
+            this.mListener = (OnTaskCompleteListener)this;
+        } catch(ClassCastException e){
+            Log.e(TAG, "It looks like we haven't implemented the interface!");
+        }
+
     }
 
     private void openFile() {
@@ -185,6 +209,10 @@ public class MainActivity extends AppCompatActivity implements URLDialog.OnCompl
             ).show();
             updateCounterAndWidget();
             return true;
+        } else if(id==R.id.action_refresh){
+            mSwipeRefreshLayout.setRefreshing(true);       // START
+            manualRefresh();
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -215,8 +243,8 @@ public class MainActivity extends AppCompatActivity implements URLDialog.OnCompl
     @Override
     public void onComplete(boolean success) {
         if(success){
-            Log.d(TAG,"onComplete() - succeeded! Updating UI Counter");
-            mText.setText(mAppState.getStatus());
+            Log.d(TAG,"onComplete() - succeeded! Updating Counter and Widget");
+            updateCounterAndWidget();
 
             // schedule the periodic refresh of this list
             schedulePeriodicRefreshWorker();
@@ -250,5 +278,24 @@ public class MainActivity extends AppCompatActivity implements URLDialog.OnCompl
                         RefreshWorker.WORK_NAME,
                         ExistingPeriodicWorkPolicy.REPLACE,                     // but if I mess this up, keep the latest one as active
                         refreshWorkRequest);
+    }
+
+    private void manualRefresh(){
+        Toast.makeText(this,
+                "Refreshing watchlist and widget...",
+                Toast.LENGTH_SHORT
+        ).show();
+
+        boolean trackingList = mAppState.getListUrl()!=null;
+        Log.d(TAG,"manualRefresh() - trackingList: "+trackingList);
+
+        if(trackingList){
+            new ImdbListTask(this,mListener,mSwipeRefreshLayout).execute();
+        } else {        // basically a no-op. Just UI refresh
+            updateCounterAndWidget();
+            if(mSwipeRefreshLayout.isRefreshing()){
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+        }
     }
 }
