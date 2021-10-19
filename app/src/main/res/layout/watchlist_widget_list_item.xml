@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/widget_item"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:background="@color/black70alpha"
+    android:padding="2dp">
+
+    <ImageView
+        android:id="@+id/widget_item_poster"
+        android:layout_width="35dp"
+        android:layout_height="match_parent"
+        android:src="@drawable/ic_movies_poster"
+        app:srcCompat="@drawable/ic_movies_poster"/>
+
+    <LinearLayout
+        android:id="@+id/widget_item_details"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/widget_item_toprow"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="25dp">
+
+            <TextView
+                android:id="@+id/widget_item_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cool Title (1994)"
+                android:layout_weight="1"
+                android:textColor="@color/white"
+                android:maxLines="1"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/widget_item_rating"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="8.3"
+                android:autoSizeTextType="uniform"
+                android:textColor="@color/white"
+                android:gravity="center"/>
+
+            <ImageView
+                android:id="@+id/icon_star"
+                android:layout_width="25dp"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_star_rating"
+                app:srcCompat="@drawable/ic_star_rating" />
+
+        </LinearLayout>
+        <!--end of toprow-->
+
+    <TextView
+        android:id="@+id/widget_item_subtitle"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:maxLines="1"
+        android:alpha="0.8"
+        android:text="Action, Drama, Thriller"
+        android:textColor="@color/white"
+        android:textSize="12sp" />
+
+    </LinearLayout>
+    <!--end of details-->
+
+</LinearLayout>
+<!--end of item-->
+

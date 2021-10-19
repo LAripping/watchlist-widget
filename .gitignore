@@ -45,3 +45,7 @@ captures/
 gradle.properties
 gradlew*
 app/proguard-rules.pro
+private/
+
+# API keys
+apikey.properties

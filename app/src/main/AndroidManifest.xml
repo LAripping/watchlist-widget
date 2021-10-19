@@ -1,32 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.tsaou.watchlistwidget">
+    package="com.laripping.watchlistwidget">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/ic_launcher_imdb"
         android:label="@string/app_name"
-        android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:roundIcon="@mipmap/ic_launcher_imdb_round"
+        android:supportsRtl="false"
+        android:theme="@style/Theme.WatchlistWidget">
+        <service
+            android:name=".WidgetService"
+            android:enabled="true"
+            android:exported="false"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
+
+        <receiver
+            android:name=".WatchlistWidget"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/watchlist_widget_info" />
+        </receiver>
+
+        <activity
+            android:name=".WatchlistWidgetConfigureActivity"
+            android:theme="@android:style/Theme.Material.Dialog.NoActionBar"
+            android:excludeFromRecents="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+        </activity>
+
+        <provider
+            android:name=".WatchlistProvider"
+            android:authorities="com.laripping.watchlistwidget"
+            android:enabled="true"
+            android:exported="true" />
+<!--        exported otherwise we get SecurityException from widget trying to call it-->
+<!--        TODO add permission-->
+
         <activity
             android:name=".MainActivity"
+            android:exported="true"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/Theme.WatchlistWidget.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <receiver android:name="WatchlistWidgetProvider" >
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-            </intent-filter>
-            <meta-data android:name="android.appwidget.provider"
-                android:resource="@xml/watchlist_widget_info" />
-        </receiver>
-
     </application>
 
 </manifest>

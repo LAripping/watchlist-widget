@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <FrameLayout
+        android:id="@+id/theader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/imdbYellow">
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent">
+            <ImageView
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:src="@drawable/ic_imdb_logo_background"
+                app:srcCompat="@drawable/ic_imdb_logo_background"
+                android:contentDescription="@string/content_description_imdb_logo" />
+            <TextView
+                android:paddingLeft="2dp"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="@string/widget_header"
+                android:textSize="12sp"
+                android:lines="1"
+                android:textColor="@color/black"
+                android:gravity="center_vertical"
+                android:layout_weight="1"
+                 />
+        </LinearLayout>
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/tbody"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:layout_gravity="center">
+        <ListView
+            android:id="@+id/title_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+        <TextView
+            android:id="@+id/empty_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:background="@color/black70alpha"
+            android:visibility="gone"
+            android:textColor="@color/imdbYellow"
+            android:text="@string/empty_widget_text"
+            android:textSize="20sp" />
+    </FrameLayout>
+</LinearLayout>

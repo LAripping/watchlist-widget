@@ -1,5 +1,32 @@
 <resources>
     <string name="app_name">Watchlist Widget</string>
     <string name="action_settings">Settings</string>
-    <string name="hint">Tap on the action button to import your watchlist!</string>
+    <string name="action_clear">Clear Data</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="empty_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="no_titles">Your watchlist is empty! Add titles by clicking the button below!</string>
+    <!--    TODO iconify-->
+    <string name="hello_second_fragment">Hello second fragment.</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="configure">Configure</string>
+    <string name="add_widget">Add widget</string>
+    <string name="app_widget_description">The widget that will display your IMDb watchlist</string>
+    <string name="refresh">Refresh</string>
+    <string name="empty_widget_text">No watchlist titles :(</string>
+    <string name="widget_header">Watch list</string>
+    <string name="content_description_imdb_logo">IMDB logo</string>
+    <string name="dialog_no">Cancel</string>
+    <string name="dialog_yes">Confirm</string>
+    <string name="dialog_header">Provide the IMDB list URL</string>
+    <string name="dialog_url_hint">https://www.imdb.com/list/...</string>
+    <string name="dialog_info">This will clear currently loaded titles</string>
+    <string name="dialog_private_problem">This IMDB list does not appear to be public. Change privacy and try again</string>
+    <string name="dialog_private_link"><a href="https://help.imdb.com/article/imdb/track-movies-tv/watchlist-faq/G9PA556494DM8YBA">IMDB Watchlist FAQ</a></string>
+    <string name="action_refresh">Refresh</string>
+    <string name="radio_file">CSV File</string>
+    <string name="radio_url">IMDB list</string>
 </resources>
