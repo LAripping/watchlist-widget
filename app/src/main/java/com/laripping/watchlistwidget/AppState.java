@@ -53,7 +53,7 @@ public class AppState {
      * The single point of truth, asks the provider for the current counter
      * @return
      */
-    private int getTitleCount() {
+    public int getTitleCount() {
         Cursor cursor = this.context.getContentResolver().query(
                 WatchlistProvider.CONTENT_URI,
                 AppDatabaseSqlite.ALL_COLUMNS,

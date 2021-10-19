@@ -71,17 +71,10 @@ public class WatchlistWidget extends AppWidgetProvider {
      * @param appWidgetManager
      * @param appWidgetId
      */
-    static void initWidget(Context context, AppWidgetManager appWidgetManager, int appWidgetId) {
-        /** AT THIS POINT, SKIP THE CONFIGACTIVITY ALTOGETHER
-        // CharSequence widgetText = WatchlistWidgetConfigureActivity.loadTitlePref(context, appWidgetId);
-        // Construct the RemoteViews object
-        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.watchlist_widget_default);
-        views.setTextViewText(R.id.appwidget_text, widgetText);
-        */
-        // Instruct the widget manager to update the widget
+    public static void initWidget(Context context, AppWidgetManager appWidgetManager, int appWidgetId) {
         Log.d(TAG,"Initializing Widget with ID: "+appWidgetId);
-        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.watchlist_widget_list_layout);
-        appWidgetManager.updateAppWidget(appWidgetId, views);
+        RemoteViews rv = buildRemoteViews(context, appWidgetId, true);
+        appWidgetManager.updateAppWidget(appWidgetId, rv);
     }
 
     /**
@@ -113,7 +106,7 @@ public class WatchlistWidget extends AppWidgetProvider {
      * @param isWide
      * @return
      */
-    private RemoteViews buildRemoteViews(Context context, int appWidgetId, boolean isWide) {
+    private static RemoteViews buildRemoteViews(Context context, int appWidgetId, boolean isWide) {
         Log.d(TAG,"Building RemoteView for widget with ID: "+appWidgetId);
         RemoteViews rv = null;
         if (isWide) {
@@ -272,6 +265,7 @@ public class WatchlistWidget extends AppWidgetProvider {
             String imdbUrl = String.format("https://www.imdb.com/title/%s/",clickedConst);
             Intent i = new Intent(Intent.ACTION_VIEW);
             i.setData(Uri.parse(imdbUrl));
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(i);
 
 //            // for now, just show a toast
@@ -284,21 +278,21 @@ public class WatchlistWidget extends AppWidgetProvider {
         super.onReceive(context, intent);
     }
 
-    /**
-     * When the user deletes the widget,
-     * Cleanup any work done in onEnabled(Context):
-     * - delete the preference associated with it (if it exists)
-     * - unregister content observer??
-     * @param context
-     * @param appWidgetIds
-     */
-    @Override
-    public void onDeleted(Context context, int[] appWidgetIds) {
-        Log.d(TAG,"onDeleted()");
-        for (int appWidgetId : appWidgetIds) {
-            WatchlistWidgetConfigureActivity.deleteTitlePref(context, appWidgetId);
-        }
-    }
+//    /**
+//     * When the user deletes the widget,
+//     * Cleanup any work done in onEnabled(Context):
+//     * - delete the preference associated with it (if it exists)
+//     * - unregister content observer??
+//     * @param context
+//     * @param appWidgetIds
+//     */
+//    @Override
+//    public void onDeleted(Context context, int[] appWidgetIds) {
+//        Log.d(TAG,"onDeleted()");
+//        for (int appWidgetId : appWidgetIds) {
+//            WatchlistWidgetConfigureActivity.deleteTitlePref(context, appWidgetId);
+//        }
+//    }
 
 
     class WatchlistDataProviderObserver extends ContentObserver {

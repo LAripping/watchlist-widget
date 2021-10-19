@@ -20,6 +20,7 @@
     android:minHeight="110dp"
     android:previewImage="@drawable/ic_widget_preview_list"
     android:resizeMode="horizontal|vertical"
+    android:configure="com.laripping.watchlistwidget.WatchlistWidgetConfigureActivity"
     android:targetCellWidth="3"
     android:targetCellHeight="2"
     android:updatePeriodMillis="1800000"

@@ -27,4 +27,6 @@
     <string name="dialog_private_problem">This IMDB list does not appear to be public. Change privacy and try again</string>
     <string name="dialog_private_link"><a href="https://help.imdb.com/article/imdb/track-movies-tv/watchlist-faq/G9PA556494DM8YBA">IMDB Watchlist FAQ</a></string>
     <string name="action_refresh">Refresh</string>
+    <string name="radio_file">CSV File</string>
+    <string name="radio_url">IMDB list</string>
 </resources>

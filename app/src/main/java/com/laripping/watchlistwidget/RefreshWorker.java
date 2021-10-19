@@ -4,7 +4,12 @@ import android.content.Context;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.work.Constraints;
 import androidx.work.Data;
+import androidx.work.ExistingPeriodicWorkPolicy;
+import androidx.work.NetworkType;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
@@ -13,6 +18,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -121,5 +127,31 @@ public class RefreshWorker extends Worker {
         Log.d(TAG,"onStopped()");
         // cancel the asynctask
         super.onStopped();
+    }
+
+    public static void schedulePeriodicRefreshWorker(AppState appState, Context activityContext) {
+        Constraints constraints = new Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.UNMETERED)                  // only over Wifi
+                .setRequiresBatteryNotLow(true)                                 // only when there's enough juice
+                .build();
+        PeriodicWorkRequest refreshWorkRequest = new PeriodicWorkRequest
+                .Builder(RefreshWorker.class, 1, TimeUnit.DAYS)     // refresh watchlist once a day
+                .setConstraints(constraints)
+                .setInitialDelay(12, TimeUnit.HOURS)                    // it's fine if first refresh is after 12h
+//                    .setBackoffCriteria(                                          // no retry conditions currently in-place
+//                            BackoffPolicy.LINEAR,
+//                            OneTimeWorkRequest.MIN_BACKOFF_MILLIS,
+//                            TimeUnit.MILLISECONDS)
+                .setInputData(                                                  // pass it the List URL - can't we get this from shared prefs in doWork()?
+                        new Data.Builder()
+                                .putString(RefreshWorker.DATA_KEY_LIST_URL, appState.getListUrl())
+                                .build()
+                )
+                .build();
+        WorkManager.getInstance(activityContext)
+                .enqueueUniquePeriodicWork(                                     // make sure there's only one work scheduled at any time
+                        RefreshWorker.WORK_NAME,
+                        ExistingPeriodicWorkPolicy.REPLACE,                     // but if I mess this up, keep the latest one as active
+                        refreshWorkRequest);
     }
 }

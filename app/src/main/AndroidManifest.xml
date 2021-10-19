@@ -32,6 +32,8 @@
 
         <activity
             android:name=".WatchlistWidgetConfigureActivity"
+            android:theme="@android:style/Theme.Material.Dialog.NoActionBar"
+            android:excludeFromRecents="true"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />

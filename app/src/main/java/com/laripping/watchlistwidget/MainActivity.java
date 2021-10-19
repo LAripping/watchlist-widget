@@ -9,7 +9,6 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.DialogFragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.work.Constraints;
 import androidx.work.Data;
@@ -19,7 +18,6 @@ import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 
 import android.util.Log;
-import android.view.View;
 
 import com.laripping.watchlistwidget.databinding.ActivityMainMonolithicBinding;
 
@@ -36,20 +34,21 @@ import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity implements OnTaskCompleteListener {
 
-    // Request code for selecting a PDF document.
-    private static final int PICK_CSV_FILE = 2;
+    public static final int PICK_CSV_FILE = 2;
     public static final String TAG = "Main";
-
 
     private ActivityMainMonolithicBinding binding;
     private AppState mAppState;
     private TextView mText;
     private OnTaskCompleteListener mListener;
     private SwipeRefreshLayout mSwipeRefreshLayout;
+    private CsvUtils mCsvUtils;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mCsvUtils = new CsvUtils(this);
 
         // Bind the toolbar
         binding = ActivityMainMonolithicBinding.inflate(getLayoutInflater());
@@ -61,37 +60,16 @@ public class MainActivity extends AppCompatActivity implements OnTaskCompleteLis
         mText = findViewById(R.id.textview_first);
         mText.setText(mAppState.getStatus());
 
-        // Bind the Floating Action Button
-//        binding.fab.setOnClickListener(new View.OnClickListener() {
-        findViewById(R.id.faboption1_import).setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view) {
-                openFile();
-            }
-        });
-        findViewById(R.id.faboption2_url).setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view) {
-                DialogFragment dialog = new URLDialog();
-                dialog.show(getSupportFragmentManager(), "urldialog");
-                //  store URL and initParse
-            }
-        });
+        // Bind the Floating Action Button options
+        findViewById(R.id.faboption1_import).setOnClickListener(view -> mCsvUtils.openFilePicker());
+        findViewById(R.id.faboption2_url).setOnClickListener(view -> new URLDialog().show(getSupportFragmentManager(), "urldialog"));
 
         // Get the SwipeRefreshLayout ref, to call setRefreshing() upon
         mSwipeRefreshLayout=findViewById(R.id.swiperefresh);
         if(mSwipeRefreshLayout==null){
             Log.e(TAG,"MSL null!");
         }
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                Log.d(TAG,"onRefresh()");
-                manualRefresh();
-            }
-        });
+        mSwipeRefreshLayout.setOnRefreshListener(() -> manualRefresh());
 
         // We implement the interface ourselves, to have the callback invoked when the task finishes
         try {
@@ -102,17 +80,7 @@ public class MainActivity extends AppCompatActivity implements OnTaskCompleteLis
 
     }
 
-    private void openFile() {
-        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-        intent.addCategory(Intent.CATEGORY_OPENABLE);
-        intent.setType("*/*");      // TODO it's greyed out when text/csv
 
-        // Optionally, specify a URI for the file that should appear in the
-        // system file picker when it loads.
-//        intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, pickerInitialUri);
-
-        startActivityForResult(intent, PICK_CSV_FILE);
-    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode,
@@ -125,7 +93,7 @@ public class MainActivity extends AppCompatActivity implements OnTaskCompleteLis
                 uri = resultData.getData();
 
                 try {
-                    parseFileFromUri(uri);
+                    mCsvUtils.parseFileFromUri(uri);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -135,21 +103,7 @@ public class MainActivity extends AppCompatActivity implements OnTaskCompleteLis
     }
 
 
-    private void parseFileFromUri(Uri uri) throws IOException {
-        try (InputStream inputStream = getContentResolver().openInputStream(uri);
-             BufferedReader reader = new BufferedReader(
-                     new InputStreamReader(Objects.requireNonNull(inputStream))
-             )) {
-            CsvUtils csv = new CsvUtils(this);
-            // TODO add spinner here
-            csv.parseCsvFile(reader);
 
-            Toast.makeText(this,
-                    "Watchlist file parsed!",
-                    Toast.LENGTH_SHORT
-            ).show();
-        }
-    }
 
     private void updateCounterAndWidget() {
         Log.d(TAG,"Updating UI Counter and Widget");
@@ -247,38 +201,14 @@ public class MainActivity extends AppCompatActivity implements OnTaskCompleteLis
             updateCounterAndWidget();
 
             // schedule the periodic refresh of this list
-            schedulePeriodicRefreshWorker();
+            RefreshWorker.schedulePeriodicRefreshWorker(mAppState,this);
 
         } else {
             Log.d(TAG,"onComplete() - failed! Not changing anything");
         }
     }
 
-    private void schedulePeriodicRefreshWorker() {
-        Constraints constraints = new Constraints.Builder()
-                .setRequiredNetworkType(NetworkType.UNMETERED)                  // only over Wifi
-                .setRequiresBatteryNotLow(true)                                 // only when there's enough juice
-                .build();
-        PeriodicWorkRequest refreshWorkRequest = new PeriodicWorkRequest
-                .Builder(RefreshWorker.class, 1, TimeUnit.DAYS)     // refresh watchlist once a day
-                .setConstraints(constraints)
-                .setInitialDelay(12, TimeUnit.HOURS)                    // it's fine if first refresh is after 12h
-//                    .setBackoffCriteria(                                          // no retry conditions currently in-place
-//                            BackoffPolicy.LINEAR,
-//                            OneTimeWorkRequest.MIN_BACKOFF_MILLIS,
-//                            TimeUnit.MILLISECONDS)
-                .setInputData(                                                  // pass it the List URL - can't we get this from shared prefs in doWork()?
-                        new Data.Builder()
-                                .putString(RefreshWorker.DATA_KEY_LIST_URL, mAppState.getListUrl())
-                                .build()
-                )
-                .build();
-        WorkManager.getInstance(this)
-                .enqueueUniquePeriodicWork(                                     // make sure there's only one work scheduled at any time
-                        RefreshWorker.WORK_NAME,
-                        ExistingPeriodicWorkPolicy.REPLACE,                     // but if I mess this up, keep the latest one as active
-                        refreshWorkRequest);
-    }
+
 
     private void manualRefresh(){
         Toast.makeText(this,

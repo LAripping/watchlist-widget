@@ -93,7 +93,7 @@ public class ImdbListTask extends AsyncTask<Void,Integer,Integer> {
             Response exportResponse = null;
 
             try {
-                // TODO ensure the URL is of proper format, without trailing GET params
+                // TODO ensure the URL is of proper format, without trailing GET params and without trailing slash (will be added)
                 // Check if list is public
                 /** Cheeky difference between Public and Private list
                  * In [1]: import requests

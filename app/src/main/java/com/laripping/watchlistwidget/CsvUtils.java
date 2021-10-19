@@ -1,9 +1,12 @@
 package com.laripping.watchlistwidget;
 
+import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderHeaderAware;
@@ -36,6 +39,31 @@ public class CsvUtils {
         this.context = ctx;
     }
 
+    public void openFilePicker() {
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType("*/*");      // TODO it's greyed out when text/csv
+
+        // Optionally, specify a URI for the file that should appear in the
+        // system file picker when it loads.
+//        intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, pickerInitialUri);
+
+        ((Activity)context).startActivityForResult(intent, MainActivity.PICK_CSV_FILE);
+    }
+
+    public void parseFileFromUri(Uri uri) throws IOException {
+        try (InputStream inputStream = context.getContentResolver().openInputStream(uri);
+             BufferedReader reader = new BufferedReader(
+                     new InputStreamReader(Objects.requireNonNull(inputStream))
+             )) {
+            parseCsvFile(reader);
+
+            Toast.makeText(context,
+                    "Watchlist file parsed!",
+                    Toast.LENGTH_SHORT
+            ).show();
+        }
+    }
 
     void parseCsvFile(BufferedReader reader) throws IOException {
         CSVReaderHeaderAware csvReaderHeaderAware = new CSVReaderHeaderAware(reader);

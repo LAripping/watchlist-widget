@@ -2,7 +2,7 @@
 
 # Watchlist Widget
 
-> An android app that beatifully displays a user's watchlist and has a home screen widget for it too!> 
+> An android app that beatifully displays a user's watchlist and has a home screen widget for it too! 
 
 In every Android's I've ever owned, I would always make room in one of the home screens for movies, as a go-to place for when I want to chill and enjoy a film, populating it with all the relevant apps and widgets. What's always annoyingly missing is a cool widget to list my options and remind of good movies I've noted. Of course, like millions other users, I use my **IMDB** watchlist for this purpose... but the IMDB App doesn't offer a Widget to display any list.
 
@@ -11,21 +11,7 @@ This app aims to bridge that gap. Simplistic, and heavily inspired by "[TV Time]
 * [OMDB API](http://www.omdbapi.com/) for fetching posters, the [Usage Instructions](#usage-instructions) for instructions on how to get your free API key and bundle within the app 
 * [Gllide](https://github.com/bumptech/glide) image loading and caching library
 * [Expandable-fab](https://github.com/nambicompany/expendable-fab) library to pump up my Floating Action Button
-* OkHttp client for fetching IMDB lists 
-
-
-
-### Disclaimers :warning:
-
-This is a free time hobby, I'm not a dev - I'm a security consultant and while I'd like to see people using my app and maybe take a glimpse of the support lifecycle, take this repo as it is:
-
-:white_check_mark: Through the eyes of a proper dev, the **code is probably shit**
-
-:white_check_mark: Of course **it doesn't include tests**, nor unit nor regression no nothing
-
-:white_check_mark: It will by no means support many devices, hell, I've **only tried it in a Xiaomi Redmi 5 Plus** 
-
- 
+* [OkHttp](https://square.github.io/okhttp/) library for fetching IMDB lists 
 
 
 
@@ -33,21 +19,33 @@ This is a free time hobby, I'm not a dev - I'm a security consultant and while I
 
 ## Features
 
-- [x] Importing IMDB Watchlist from downloaded CSV file
+:white_check_mark: ​Importing IMDB Watchlist from downloaded CSV file
 
-- [ ] **Coming Soon!** :hourglass: Pointing to a *public* IMDB Watchlist to track
+:white_check_mark: ​Pointing to a *public* IMDB Watchlist to track
 
-- [x] Placing fancy, scrollable widgets on your home screen (pics below)
+:white_check_mark: Placing fancy, scrollable widgets on your home screen (pics below)
 
-- [x] Clicking titles to get to the IMDB page
+:white_check_mark: Clicking titles to get to the IMDB page
 
-- [ ] **Coming Soon!** :hourglass: Pull down main app screen to manually refresh widget from tracked IMDB list 
+:white_check_mark: Pull down main app screen to manually refresh widget from tracked IMDB list 
 
-  | List Widget                 | Grid Widget | Stack Widget |
-  | --------------------------- | ----------- | ------------ |
-  | ![](listwidget-cropped.jpg) |             |              |
+| List Widget                 | Grid Widget                    | Stack Widget                   |
+| --------------------------- | ------------------------------ | ------------------------------ |
+| ![](listwidget-cropped.jpg) | :hourglass: ***Coming soon!*** | :hourglass: ***Coming soon!*** |
 
-  
+
+
+
+
+### Disclaimers :warning:
+
+This is a free time hobby, I'm not a dev - I'm a security consultant and while I'd like to see people using my app and maybe take a glimpse of the support lifecycle, take this repo as it is:
+
+:x: Through the eyes of a proper dev, the **code is probably shit**
+
+:x: Of course **it doesn't include tests**, nor unit nor regression no nothing
+
+:x: It will by no means support many devices, hell, I've **only tried it in a Xiaomi Redmi 5 Plus**, and my own **Pixel 2**
 
 
 
@@ -81,9 +79,9 @@ This is a free time hobby, I'm not a dev - I'm a security consultant and while I
   - [x] lists a counter on main screen to validate 
 - [x] ...and exposes  a bare `ListView`  widget 
   - [x] (ideally) with fetched title icons if space / when resized
-- [ ] (button #2 - 3dots) Widget settings 
+- [x] (button #2 - 3dots) Widget settings 
   - [x] Clear all data
-  - [x] **Refresh** (from list)
+  - [x] **Refresh** (from list) - using a `PeriodicWorker` thread
     - [x] **periodic widget auto-refresh**,from the provider - obeys the `update interval` in the XML
   - [ ] About ->
     - [ ] `AboutActivity` with Github link for updates, Version (/ commit hash + date)
@@ -91,6 +89,7 @@ This is a free time hobby, I'm not a dev - I'm a security consultant and while I
     - [ ] Auto-refresh interval - Subtitle: Last Refresh
     - [ ] Option to hide app icon
     - [ ] Untrack list (greyed out if not tracking)
+    - [ ] **Parameterized** OMDB API key + Field in `ConfigActivity` to receive it
 - [x] Styling Round #1
 - [x] Click widget item to open IMDB url
 
@@ -99,12 +98,13 @@ This is a free time hobby, I'm not a dev - I'm a security consultant and while I
   * expanded options are " :mag:" for static import and ":globe_with_meridians:" for URL 
   * [x] URL prompt (:information_source: this will clear your current database)-> loader -> loaded! 
   * [x] (if failed) Possible cause: list needs to be made "public"  (pointer to IMDB FAQs)
-- [ ] Widget-initiated-flow with `ConfigActivity`
+- [x] Widget-initiated-flow with `ConfigActivity`
 - [ ] Styling Round #2 - Main Screen
   - [ ] display a collage/tiling of titles' posters, below the Status ("Empty"/"N titles"), fading towards the FAB 
   - [ ] show List (Name?) currently traced
-  - [ ] **Pull Down to Refresh** (+hint)
-- [ ] manual widget refresh (via Icon) on the widget, to  skips app launch
+  - [x] **Pull Down to Refresh** (+hint)
+  - [ ] (on Widget) click icon to launch app
+- [ ] ~~manual widget refresh (via Icon) on the widget, to  skips app launch~~
 - [ ] Spinners and Loading TODOs
 - [ ] TODOs and Error handling 
 - [ ] Implement different  [Widget types](https://developer.android.com/guide/topics/appwidgets/collections):
