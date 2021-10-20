@@ -17,12 +17,15 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -49,6 +52,7 @@ public class ImdbListTask extends AsyncTask<Void,Integer,Integer> {
     private static final int RESULT_CODE_UNKNOWN = 2;
     private static final int RESULT_CODE_NETWORK_ERROR = 3;
     private static final int RESULT_CODE_CSV_PARSER = 4;
+    private static final int RESULT_CODE_BAD_URL = 5;
 //
 //    public static final int TASK_CODE_INIT = 0;
 //    public static final int TASK_CODE_REFRESH = 1;
@@ -93,7 +97,10 @@ public class ImdbListTask extends AsyncTask<Void,Integer,Integer> {
             Response exportResponse = null;
 
             try {
-                // TODO ensure the URL is of proper format, without trailing GET params and without trailing slash (will be added)
+                // Check and Normalise url
+                listUrl = URLDialog.checkImdbListUrl(listUrl);
+                if (listUrl == null) return RESULT_CODE_BAD_URL;
+
                 // Check if list is public
                 /** Cheeky difference between Public and Private list
                  * In [1]: import requests
@@ -155,6 +162,7 @@ public class ImdbListTask extends AsyncTask<Void,Integer,Integer> {
 
     }
 
+
     protected void onProgressUpdate(Integer... progress) {
             // TODO update Spinner/notification with progress[0] (0-100%)
     }
@@ -177,6 +185,8 @@ public class ImdbListTask extends AsyncTask<Void,Integer,Integer> {
                     ComponentName cn = new ComponentName(mContext, WatchlistWidget.class);
                     mgr.notifyAppWidgetViewDataChanged(mgr.getAppWidgetIds(cn), R.id.title_list);
                     break;
+
+                /////// ERROR CASES //////////
                 case RESULT_CODE_NOT_PUBLIC:
                     // make the link clickable
                     LayoutInflater inflater = ((Activity) mContext).getLayoutInflater();
@@ -188,23 +198,24 @@ public class ImdbListTask extends AsyncTask<Void,Integer,Integer> {
                     new AlertDialog.Builder(mContext)
                             .setTitle("List not public")
                             .setView(inflatedView)
-                            .setNeutralButton("OK", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                    // Do we need anything else?
-                                }})
+                            .setNeutralButton("OK", (dialog, id) -> {})
                             .create()
                             .show();
                     break;
+                case RESULT_CODE_BAD_URL:
+                    new AlertDialog.Builder(mContext)
+                            .setTitle("Bad URL format")
+                            .setMessage("This doesn't look like an IMDB list URL")
+                            .setNeutralButton("OK", (dialog, id) -> {})
+                            .create()
+                            .show();
+                    break;
+
                 case RESULT_CODE_NETWORK_ERROR:
                     new AlertDialog.Builder(mContext)
                             .setTitle("No internet")
                             .setMessage("Check your network connectivity and try again")
-                            .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    // Do we need anything else?
-                                }
-                            })
+                            .setNegativeButton("Cancel", (dialog, which) -> {})
                             .setPositiveButton("Retry", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
                                     new ImdbListTask(mContext, mListener).execute();
@@ -217,10 +228,7 @@ public class ImdbListTask extends AsyncTask<Void,Integer,Integer> {
                     new AlertDialog.Builder(mContext)
                             .setTitle("Something went wrong")
                             .setMessage("An unexpected response was received from IMDB")
-                            .setNeutralButton("OK", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                    // Do we need anything else?
-                                }})
+                            .setNeutralButton("OK", (dialog, id) -> {})
                             .create()
                             .show();
                     break;

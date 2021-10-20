@@ -49,3 +49,4 @@ private/
 
 # API keys
 apikey.properties
+/WATCH.csv

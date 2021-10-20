@@ -74,39 +74,25 @@ This is a free time hobby, I'm not a dev - I'm a security consultant and while I
 
 ## Roadmap
 
-- [x] Single-screen App that allows CSV import (button #1 - action ), 
-  - [x] saves it (`Provider`), backed by `SQLiteDatabase`
-  - [x] lists a counter on main screen to validate 
-- [x] ...and exposes  a bare `ListView`  widget 
-  - [x] (ideally) with fetched title icons if space / when resized
-- [x] (button #2 - 3dots) Widget settings 
-  - [x] Clear all data
-  - [x] **Refresh** (from list) - using a `PeriodicWorker` thread
-    - [x] **periodic widget auto-refresh**,from the provider - obeys the `update interval` in the XML
-  - [ ] About ->
-    - [ ] `AboutActivity` with Github link for updates, Version (/ commit hash + date)
-  - [ ] Settings -> `SettingsActivity` 
-    - [ ] Auto-refresh interval - Subtitle: Last Refresh
-    - [ ] Option to hide app icon
-    - [ ] Untrack list (greyed out if not tracking)
-    - [ ] **Parameterized** OMDB API key + Field in `ConfigActivity` to receive it
-- [x] Styling Round #1
-- [x] Click widget item to open IMDB url
+- [ ] About ->
+  - [ ] `AboutActivity` with Github link for updates, Version (/ commit hash + date)
+- [ ] Settings -> `SettingsActivity` 
+  - [ ] Auto-refresh interval - Subtitle: Last Refresh
+  - [ ] Option to hide app icon
+  - [ ] Untrack list (greyed out if not tracking)
+  - [ ] **Parameterized** OMDB API key + Field in `ConfigActivity` to receive it
 
-- [x] FAB Expand action like LastPass?
-  * original button will become just ":heavy_plus_sign:"
-  * expanded options are " :mag:" for static import and ":globe_with_meridians:" for URL 
-  * [x] URL prompt (:information_source: this will clear your current database)-> loader -> loaded! 
-  * [x] (if failed) Possible cause: list needs to be made "public"  (pointer to IMDB FAQs)
-- [x] Widget-initiated-flow with `ConfigActivity`
-- [ ] Styling Round #2 - Main Screen
+- [ ] Styling
   - [ ] display a collage/tiling of titles' posters, below the Status ("Empty"/"N titles"), fading towards the FAB 
   - [ ] show List (Name?) currently traced
-  - [x] **Pull Down to Refresh** (+hint)
   - [ ] (on Widget) click icon to launch app
-- [ ] ~~manual widget refresh (via Icon) on the widget, to  skips app launch~~
+  - [ ] night theme doesn't work nice
 - [ ] Spinners and Loading TODOs
 - [ ] TODOs and Error handling 
+  - [ ] What happens to posters when API key reaches max?
+- [ ] Security fixes
+  - [ ] Encrypted Prefs to protect the user's watchlist (and OMDB key)
+  - [ ] Provider permission
 - [ ] Implement different  [Widget types](https://developer.android.com/guide/topics/appwidgets/collections):
   - [x] List
   - [ ] Grid

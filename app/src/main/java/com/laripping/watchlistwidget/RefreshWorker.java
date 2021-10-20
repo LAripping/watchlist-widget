@@ -60,7 +60,10 @@ public class RefreshWorker extends Worker {
         Response exportResponse = null;
 
         try {
-            // TODO ensure the URL is of proper format, without trailing GET params
+            // Check URL format and normalise
+            listUrl = URLDialog.checkImdbListUrl(listUrl);
+            if (listUrl == null) return Result.failure();
+
             // Check if list is public
             /** Cheeky difference between Public and Private list
              * In [1]: import requests
