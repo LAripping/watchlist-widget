@@ -131,7 +131,13 @@ public class WatchlistWidget extends AppWidgetProvider {
                     onClickIntent, PendingIntent.FLAG_UPDATE_CURRENT);
             rv.setPendingIntentTemplate(R.id.title_list, onClickPendingIntent);
 
-//            // 3 - Bind the click intent for the refresh button on the widget
+            // 3 - Bind the click intent for the widget header
+
+            Intent startAppIntent = new Intent(context, MainActivity.class);
+            PendingIntent startAppPendingIntent = PendingIntent.getActivity(context,0,startAppIntent,0);
+            rv.setOnClickPendingIntent(R.id.theader,startAppPendingIntent);
+
+//            // 4 - Bind the click intent for the refresh button on the widget
 //            final Intent refreshIntent = new Intent(context, WeatherWidgetProvider.class);
 //            refreshIntent.setAction(WeatherWidgetProvider.REFRESH_ACTION);
 //            final PendingIntent refreshPendingIntent = PendingIntent.getBroadcast(context, 0,
@@ -140,7 +146,6 @@ public class WatchlistWidget extends AppWidgetProvider {
 
 //            // Restore the minimal header
 //            rv.setTextViewText(R.id.city_name, context.getString(R.string.city_name));
-
         } else {
 //            TODO small widget layout
 //            rv = new RemoteViews(context.getPackageName(), R.layout.widget_layout_small);
@@ -160,6 +165,7 @@ public class WatchlistWidget extends AppWidgetProvider {
         if(rv == null){
             throw new RuntimeException("RemoteView was not created!");
         }
+        Log.d(TAG,"Built!");
         return rv;
     }
 
