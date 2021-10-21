@@ -1,9 +1,11 @@
 package com.laripping.watchlistwidget;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.util.Log;
 import android.widget.Toast;
@@ -15,6 +17,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Objects;
 
@@ -66,6 +69,32 @@ public class CsvUtils {
     }
 
     void parseCsvFile(BufferedReader reader) throws IOException {
+        /**
+         * BUG: Removed titles upstream are not reflected - Silly approach #1:
+         * Will keep all downstream (saved) const IDs in a set, and remove after insertion/skip in the loop.
+         * If at end of process they're still there, purge respective titles
+         */
+//        ArrayList<String> allConstsWeHave = new ArrayList<>();
+//        try (Cursor c = this.context.getContentResolver().query(
+//                WatchlistProvider.CONTENT_URI,
+//                new String[]{AppDatabaseSqlite.COLUMN_CONST},         // only get Const's
+//                null,
+//                new String[]{""},
+//                "_ID ASC")) {
+//            while (c.moveToNext()) {
+//                int constColIndex = c.getColumnIndex(AppDatabaseSqlite.COLUMN_CONST);
+//                allConstsWeHave.add(c.getString(constColIndex));
+//            }
+//        }
+
+        /**
+         * Silly approach #2 = deleteAll() before the insertAll()
+         */
+        this.context.getContentResolver().delete(
+                WatchlistProvider.CONTENT_URI,
+                null,
+                null);
+
         CSVReaderHeaderAware csvReaderHeaderAware = new CSVReaderHeaderAware(reader);
         Map<String, String> csvLine;
         while (((csvLine = csvReaderHeaderAware.readMap())) != null)   // read line
@@ -102,6 +131,7 @@ public class CsvUtils {
                 existing = true;
             }
             // in any case:
+//            allConstsWeHave.remove(csvLine.get(CSV_CONST));
             if(existing) {
                 Log.i(TAG, "Title existed in DB, Ignored");
             } else {
@@ -109,6 +139,12 @@ public class CsvUtils {
             }
 
         } // while
+//        for(String deletedUpstream : allConstsWeHave){
+//            this.context.getContentResolver().delete(
+//                    WatchlistProvider.CONTENT_URI,
+//                    newValues
+//            );
+//        }
     }
 
 

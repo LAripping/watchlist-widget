@@ -74,25 +74,26 @@ This is a free time hobby, I'm not a dev - I'm a security consultant and while I
 
 ## Roadmap
 
-- [ ] About ->
+- [ ] **About** ->
   - [ ] `AboutActivity` with Github link for updates, Version (/ commit hash + date)
 - [ ] Settings -> `SettingsActivity` 
   - [ ] Auto-refresh interval - Subtitle: Last Refresh
   - [ ] Option to hide app icon
   - [ ] Untrack list (greyed out if not tracking)
   - [ ] **Parameterized** OMDB API key + Field in `ConfigActivity` to receive it
-
+  - [ ] <u>and release from GH</u> + instructions to install from unknown sources - but switch back off afterwards
+  
 - [ ] Styling
   - [ ] display a collage/tiling of titles' posters, below the Status ("Empty"/"N titles"), fading towards the FAB 
   - [ ] show List (Name?) currently traced
-  - [ ] (on Widget) click icon to launch app
   - [ ] night theme doesn't work nice
-- [ ] Spinners and Loading TODOs
+- [ ] **Spinners and Loading TODOs**
 - [ ] TODOs and Error handling 
   - [ ] What happens to posters when API key reaches max?
 - [ ] Security fixes
   - [ ] Encrypted Prefs to protect the user's watchlist (and OMDB key)
   - [ ] Provider permission
+  - [ ] Permission (?) to launch `ConfigActivity`
 - [ ] Implement different  [Widget types](https://developer.android.com/guide/topics/appwidgets/collections):
   - [x] List
   - [ ] Grid
