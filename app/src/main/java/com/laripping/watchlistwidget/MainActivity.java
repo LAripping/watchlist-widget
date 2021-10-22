@@ -132,10 +132,11 @@ public class MainActivity extends AppCompatActivity implements OnTaskCompleteLis
         int id = item.getItemId();
 
         if (id == R.id.action_settings) {
-            Toast.makeText(this,
-                    "No settings at this time!",
-                    Toast.LENGTH_SHORT
-            ).show();
+//            Toast.makeText(this,
+//                    "No settings at this time!",
+//                    Toast.LENGTH_SHORT
+//            ).show();
+            startActivity(new Intent(MainActivity.this,SettingsActivity.class));
             return true;
         } else if (id == R.id.action_clear) {
             int deleteCount = this.getContentResolver().delete(

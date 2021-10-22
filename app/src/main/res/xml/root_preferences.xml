@@ -1,0 +1,50 @@
+<PreferenceScreen
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory app:title="IMDB List Tracking">
+        <!--        TODO grey everything out programmatically when imported from file -->
+        <Preference
+            app:key="@string/key_imdb_list"
+            app:title="Tracking IMDB list"
+            app:defaultValue="Not tracking IMDB list"
+            app:useSimpleSummaryProvider="true" />
+        <EditTextPreference
+            app:key="@string/key_refresh_interval"
+            app:title="Auto-refresh interval"
+            app:useSimpleSummaryProvider="true" />
+        <EditTextPreference
+            app:key="@string/key_last_refresh"
+            app:title="Last auto-refresh"
+            app:selectable="false"
+            app:defaultValue="No auto-refreshes made yet!"
+            app:useSimpleSummaryProvider="true" />
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="Others">
+        <SwitchPreferenceCompat
+            app:key="@string/key_show_only_movies"
+            app:title="Show only movies"
+            app:defaultValue="true"
+            app:summaryOff="Also showing TV series and mini-series"
+            app:summaryOn="Showing only movies and TV movies" />
+        <EditTextPreference
+            app:key="@string/key_api_key"
+            app:title="OMDB API Key"
+            app:useSimpleSummaryProvider="true" />
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="About">
+        <Preference
+            app:key="@string/key_version"
+            app:title="Update app"
+            app:summary="Version X.X.X\nGithub commit deadbeef">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="https://www.github.com/LAripping/watchlist-widget/releases" />
+        </Preference>
+
+    </PreferenceCategory>
+
+
+</PreferenceScreen>

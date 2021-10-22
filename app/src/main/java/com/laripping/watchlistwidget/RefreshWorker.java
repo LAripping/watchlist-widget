@@ -137,10 +137,11 @@ public class RefreshWorker extends Worker {
                 .setRequiredNetworkType(NetworkType.UNMETERED)                  // only over Wifi
                 .setRequiresBatteryNotLow(true)                                 // only when there's enough juice
                 .build();
+        int refreshIvalHrs = 1;                                                 // TODO parameterize : persist the Pref value and get from there programmatically
         PeriodicWorkRequest refreshWorkRequest = new PeriodicWorkRequest
-                .Builder(RefreshWorker.class, 1, TimeUnit.DAYS)     // refresh watchlist once a day
+                .Builder(RefreshWorker.class, refreshIvalHrs, TimeUnit.HOURS)   // refresh watchlist once a day
                 .setConstraints(constraints)
-                .setInitialDelay(12, TimeUnit.HOURS)                    // it's fine if first refresh is after 12h
+                .setInitialDelay(refreshIvalHrs, TimeUnit.HOURS)                // spend a whole interval and then fire
 //                    .setBackoffCriteria(                                          // no retry conditions currently in-place
 //                            BackoffPolicy.LINEAR,
 //                            OneTimeWorkRequest.MIN_BACKOFF_MILLIS,

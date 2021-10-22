@@ -29,4 +29,32 @@
     <string name="action_refresh">Refresh</string>
     <string name="radio_file">CSV File</string>
     <string name="radio_url">IMDB list</string>
+
+
+    <!-- Preference Titles -->
+    <string name="messages_header">Messages</string>
+    <string name="sync_header">Sync</string>
+
+    <!-- Messages Preferences -->
+    <string name="pref_api_key">OMDB API Key</string>
+    <string name="pref_refresh_interval">List auto-refresh interval</string>
+    <string name="pref_show_only_movies">Show only movies</string>
+    <string name="reply_title">Default reply action</string>
+
+    <!-- Sync Preferences -->
+    <string name="sync_title">Sync email periodically</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+    </string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
+    <string name="title_activity_settings">Settings</string>
+
+    <!-- Messages Preferences -->
+    <string name="signature_title">Your signature</string>
+    <string name="key_imdb_list">imdb_list</string>
+    <string name="key_refresh_interval">refresh_interval</string>
+    <string name="key_last_refresh">last_refresh</string>
+    <string name="key_show_only_movies">show_only_movies</string>
+    <string name="key_api_key">api_key</string>
+    <string name="key_version">version</string>
 </resources>

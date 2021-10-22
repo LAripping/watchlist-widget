@@ -76,12 +76,12 @@ This is a free time hobby, I'm not a dev - I'm a security consultant and while I
 
 - [ ] **About** ->
   - [ ] `AboutActivity` with Github link for updates, Version (/ commit hash + date)
+  - [ ] <u>and release from GH</u> + instructions to install from unknown sources - but switch back off afterwards
 - [ ] Settings -> `SettingsActivity` 
   - [ ] Auto-refresh interval - Subtitle: Last Refresh
   - [ ] Option to hide app icon
   - [ ] Untrack list (greyed out if not tracking)
   - [ ] **Parameterized** OMDB API key + Field in `ConfigActivity` to receive it
-  - [ ] <u>and release from GH</u> + instructions to install from unknown sources - but switch back off afterwards
   
 - [ ] Styling
   - [ ] display a collage/tiling of titles' posters, below the Status ("Empty"/"N titles"), fading towards the FAB 
