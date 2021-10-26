@@ -12,13 +12,13 @@
         <EditTextPreference
             app:key="@string/key_refresh_interval"
             app:title="Auto-refresh interval"
-            app:useSimpleSummaryProvider="true" />
-        <EditTextPreference
+            app:defaultValue="1" />
+        <Preference
             app:key="@string/key_last_refresh"
             app:title="Last auto-refresh"
             app:selectable="false"
-            app:defaultValue="No auto-refreshes made yet!"
-            app:useSimpleSummaryProvider="true" />
+            app:persistent="false"
+            android:persistent="false" />
     </PreferenceCategory>
 
     <PreferenceCategory app:title="Others">

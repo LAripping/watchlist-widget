@@ -1,9 +1,11 @@
 package com.laripping.watchlistwidget;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.preference.PreferenceManager;
 import androidx.work.Constraints;
 import androidx.work.Data;
 import androidx.work.ExistingPeriodicWorkPolicy;
@@ -18,7 +20,12 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -58,6 +65,7 @@ public class RefreshWorker extends Worker {
         Request exportRequest = null;
         Response listResponse = null;
         Response exportResponse = null;
+        String title = null;
 
         try {
             // Check URL format and normalise
@@ -90,6 +98,17 @@ public class RefreshWorker extends Worker {
             }
             setProgressAsync(new Data.Builder().putInt(DATA_KEY_PROGRESS, 25).build());
 
+            // Parse the HTML for the list's title
+            String titleRegex = "<title>(.*?) - IMDb</title>";
+            Pattern imdbTitlePattern = Pattern.compile(titleRegex, Pattern.DOTALL);
+            Matcher matcher = imdbTitlePattern.matcher(body);
+            if(!matcher.find()){
+                Log.d(TAG,"Title not found by the regex!");
+            } else {
+                title = matcher.group(1);
+                Log.d(TAG,"IMDB List Title captured: "+ title);
+            }
+
             // Fetch the list's CSV version
             Log.d(TAG, "Requesting the /export endpoint...");
             exportRequest = new Request.Builder()
@@ -120,6 +139,19 @@ public class RefreshWorker extends Worker {
 
         Log.d(TAG,"finished successfully, exiting");
         setProgressAsync(new Data.Builder().putInt(DATA_KEY_PROGRESS, 100).build());
+
+        // save the execution time, to be displayed in Settings
+        // " Wed, 4 Jul 2001 12:08:56
+        DateFormat df = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss");
+        String lastRefTime = df.format(Calendar.getInstance().getTime());
+
+        SharedPreferences.Editor editor = mContext
+                .getSharedPreferences(AppState.PREF_FILE_NAME, Context.MODE_PRIVATE)
+                .edit();
+        editor.putString(AppState.PREF_REFRESH_KEY, lastRefTime);
+        editor.putString(AppState.PREF_LIST_NAME, title);
+        editor.apply();
+
         return Result.success();
 //            return Result.retry();    no retry conditions currently in-place
     }
@@ -132,17 +164,17 @@ public class RefreshWorker extends Worker {
         super.onStopped();
     }
 
-    public static void schedulePeriodicRefreshWorker(AppState appState, Context activityContext) {
+    public static void schedulePeriodicRefreshWorker(AppState appState, Context activityContext, int refreshIvalHrs) {
         Constraints constraints = new Constraints.Builder()
                 .setRequiredNetworkType(NetworkType.UNMETERED)                  // only over Wifi
                 .setRequiresBatteryNotLow(true)                                 // only when there's enough juice
                 .build();
-        int refreshIvalHrs = 1;                                                 // TODO parameterize : persist the Pref value and get from there programmatically
+
         PeriodicWorkRequest refreshWorkRequest = new PeriodicWorkRequest
                 .Builder(RefreshWorker.class, refreshIvalHrs, TimeUnit.HOURS)   // refresh watchlist once a day
                 .setConstraints(constraints)
                 .setInitialDelay(refreshIvalHrs, TimeUnit.HOURS)                // spend a whole interval and then fire
-//                    .setBackoffCriteria(                                          // no retry conditions currently in-place
+//                    .setBackoffCriteria(                                      // no retry conditions currently in-place
 //                            BackoffPolicy.LINEAR,
 //                            OneTimeWorkRequest.MIN_BACKOFF_MILLIS,
 //                            TimeUnit.MILLISECONDS)

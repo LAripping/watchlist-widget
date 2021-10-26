@@ -7,6 +7,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -125,6 +126,25 @@ public class ImdbListTask extends AsyncTask<Void,Integer,Integer> {
                     // List Non-Public
                     return RESULT_CODE_NOT_PUBLIC;
                 }
+
+                // Parse the HTML for the list's title
+                String titleRegex = "<title>(.*?) - IMDb</title>";
+                Pattern imdbTitlePattern = Pattern.compile(titleRegex, Pattern.DOTALL);
+                Matcher matcher = imdbTitlePattern.matcher(body);
+                if(!matcher.find()){
+                    Log.d(TAG,"Title not found by the regex!");
+                } else{
+                    String title = matcher.group(1);
+                    Log.d(TAG,"IMDB List Title captured: "+ title);
+                    SharedPreferences.Editor editor = mContext
+                            .getSharedPreferences(AppState.PREF_FILE_NAME, Context.MODE_PRIVATE)
+                            .edit();
+                    editor.putString(AppState.PREF_LIST_NAME, title);
+                    editor.apply();
+                }
+
+
+
                 publishProgress(25);  // leads to an invocation of onProgressUpdate()
 
                 // Fetch the list's CSV version

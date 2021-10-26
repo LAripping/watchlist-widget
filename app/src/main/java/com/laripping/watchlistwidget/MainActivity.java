@@ -9,12 +9,8 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.preference.PreferenceManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import androidx.work.Constraints;
-import androidx.work.Data;
-import androidx.work.ExistingPeriodicWorkPolicy;
-import androidx.work.NetworkType;
-import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 
 import android.util.Log;
@@ -25,12 +21,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
-import java.io.BufferedReader;
+
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.Objects;
-import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity implements OnTaskCompleteListener {
 
@@ -139,30 +131,7 @@ public class MainActivity extends AppCompatActivity implements OnTaskCompleteLis
             startActivity(new Intent(MainActivity.this,SettingsActivity.class));
             return true;
         } else if (id == R.id.action_clear) {
-            int deleteCount = this.getContentResolver().delete(
-                    WatchlistProvider.CONTENT_URI,
-                    null,
-                    null);
-            StringBuilder toastBuilder = new StringBuilder().append("\u2713 All "+deleteCount+" titles cleared");
-
-            if(mAppState.getListUrl()!=null){
-                SharedPreferences.Editor editor = getSharedPreferences(AppState.PREF_FILE_NAME, Context.MODE_PRIVATE).edit();
-                editor.remove(AppState.PREF_LIST_KEY);
-                editor.commit();
-                toastBuilder.append("\n\u2713 Not tracking IMDB list any more");
-                // calling apply() would do this async, risking a race condition on the immediately upcoming
-                // getState() -> Prefs.getString() which would show stale prefs. Let's see if that has an
-                // impact on the main thread
-
-                WorkManager.getInstance(this).cancelUniqueWork(RefreshWorker.WORK_NAME);
-                toastBuilder.append("\n\u2713 Periodic watchlist refresh canceled");
-            }
-
-            Toast.makeText(this,
-                    toastBuilder.toString(),
-                    Toast.LENGTH_SHORT
-            ).show();
-            updateCounterAndWidget();
+            clearAll();
             return true;
         } else if(id==R.id.action_refresh){
             mSwipeRefreshLayout.setRefreshing(true);       // START
@@ -201,8 +170,14 @@ public class MainActivity extends AppCompatActivity implements OnTaskCompleteLis
             Log.d(TAG,"onComplete() - succeeded! Updating Counter and Widget");
             updateCounterAndWidget();
 
+            // get the refresh interval
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+            int refreshIvalHrs = sharedPreferences.getInt(
+                    SettingsActivity.SETTING_KEY_IVAL,
+                    SettingsActivity.DEFAULT_IVAL
+            );
             // schedule the periodic refresh of this list
-            RefreshWorker.schedulePeriodicRefreshWorker(mAppState,this);
+            RefreshWorker.schedulePeriodicRefreshWorker(mAppState, this, refreshIvalHrs);
 
         } else {
             Log.d(TAG,"onComplete() - failed! Not changing anything");
@@ -228,5 +203,35 @@ public class MainActivity extends AppCompatActivity implements OnTaskCompleteLis
                 mSwipeRefreshLayout.setRefreshing(false);
             }
         }
+    }
+
+
+    private void clearAll() {
+        int deleteCount = this.getContentResolver().delete(
+                WatchlistProvider.CONTENT_URI,
+                null,
+                null);
+        StringBuilder toastBuilder = new StringBuilder().append("\u2713 All "+deleteCount+" titles cleared");
+
+        if(mAppState.getListUrl()!=null){
+            SharedPreferences.Editor editor = getSharedPreferences(AppState.PREF_FILE_NAME, Context.MODE_PRIVATE).edit();
+            editor.remove(AppState.PREF_LIST_KEY);
+            editor.remove(AppState.PREF_LIST_NAME);
+            editor.remove(AppState.PREF_REFRESH_KEY);
+            editor.commit();
+            toastBuilder.append("\n\u2713 Not tracking IMDB list any more");
+            // calling apply() would do this async, risking a race condition on the immediately upcoming
+            // getState() -> Prefs.getString() which would show stale prefs. Let's see if that has an
+            // impact on the main thread
+
+            WorkManager.getInstance(this).cancelUniqueWork(RefreshWorker.WORK_NAME);
+            toastBuilder.append("\n\u2713 Periodic watchlist refresh canceled");
+        }
+
+        Toast.makeText(this,
+                toastBuilder.toString(),
+                Toast.LENGTH_SHORT
+        ).show();
+        updateCounterAndWidget();
     }
 }

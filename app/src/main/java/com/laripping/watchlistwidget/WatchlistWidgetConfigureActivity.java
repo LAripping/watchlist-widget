@@ -16,6 +16,7 @@ import android.widget.RadioButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentActivity;
+import androidx.preference.PreferenceManager;
 
 import com.laripping.watchlistwidget.databinding.WatchlistWidgetConfigureBinding;
 
@@ -151,8 +152,16 @@ public class WatchlistWidgetConfigureActivity extends FragmentActivity implement
             AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
             WatchlistWidget.initWidget(this, appWidgetManager, mAppWidgetId);
 
+
+            // get the refresh interval
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+            int refreshIvalHrs = sharedPreferences.getInt(
+                    SettingsActivity.SETTING_KEY_IVAL,
+                    SettingsActivity.DEFAULT_IVAL
+            );
+
             // schedule the periodic refresh of this list
-            RefreshWorker.schedulePeriodicRefreshWorker(mAppState,this);
+            RefreshWorker.schedulePeriodicRefreshWorker(mAppState,this, refreshIvalHrs);
 
             setResult(RESULT_OK);
             finish();

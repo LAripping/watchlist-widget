@@ -39,7 +39,6 @@
                 android:layout_marginLeft="10pt"
                 android:layout_marginTop="50pt"
                 android:layout_marginRight="10pt"
-                android:lines="2"
                 android:text="@string/no_titles"
                 android:textSize="20sp"
                 app:layout_constraintEnd_toEndOf="parent"

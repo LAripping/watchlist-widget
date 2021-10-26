@@ -57,4 +57,5 @@
     <string name="key_show_only_movies">show_only_movies</string>
     <string name="key_api_key">api_key</string>
     <string name="key_version">version</string>
+    <string name="no_refreshes_yet">No auto-refreshes made yet!</string>
 </resources>
