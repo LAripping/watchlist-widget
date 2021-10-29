@@ -3,6 +3,7 @@ package com.laripping.watchlistwidget;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -10,6 +11,8 @@ import android.os.IBinder;
 import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
+
+import androidx.preference.PreferenceManager;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.FutureTarget;
@@ -72,6 +75,7 @@ public class WidgetService extends RemoteViewsService {
 
         /**
          * Refresh the cursor by asking the provider
+         * Called when notifyDataSetChanged() is triggered on the remote adapter.
          */
         @Override
         public void onDataSetChanged() {
@@ -79,11 +83,29 @@ public class WidgetService extends RemoteViewsService {
             if (mCursor != null) {
                 mCursor.close();
             }
+
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+            boolean onlyMovies = sharedPreferences.getBoolean(
+                    getResources().getString(R.string.key_show_only_movies),
+                    true
+            );
+            Log.d(TAG,"showing only movies? "+onlyMovies);
+            String selectionClause = null;
+            String[] selectionArgs = new String[]{""};
+
+            if(onlyMovies){
+                selectionClause = AppDatabaseSqlite.COLUMN_TYPE+" IN (?,?)";
+                selectionArgs = new String[] {
+                        Title.Type.movie.toString(),
+                        Title.Type.tvMovie.toString()
+                };
+            }
+
             mCursor = mContext.getContentResolver().query(
                     WatchlistProvider.CONTENT_URI,
                     AppDatabaseSqlite.ALL_COLUMNS,
-                    null,
-                    new String[]{""},
+                    selectionClause,
+                    selectionArgs ,
                     "_ID ASC");
             Log.i(TAG,"Cursor returned in time, includes "+mCursor.getCount()+" rows");
         }
@@ -98,8 +120,9 @@ public class WidgetService extends RemoteViewsService {
 
         @Override
         public int getCount() {
-            Log.d(TAG,"getCount()");
-            return mCursor.getCount();
+            int count = mCursor.getCount();
+            Log.d(TAG,"getCount(): "+count);
+            return count;
         }
 
         /**
@@ -178,6 +201,7 @@ public class WidgetService extends RemoteViewsService {
                 Glide.with(this.mContext).clear(submit);
             } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
+                // TODO error handling. Just no img or API issue?
             }
         }
     }

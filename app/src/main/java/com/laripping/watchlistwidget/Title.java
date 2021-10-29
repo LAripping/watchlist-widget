@@ -21,7 +21,7 @@ public class Title {
     private String directors;
 
     public enum Type {
-        tvMovie, movie, tvMiniSeries, tvSeries
+        tvMovie, movie, tvMiniSeries, tvSeries, videoGame
     }
 
     public Title(Cursor cursor) {

@@ -77,19 +77,20 @@ This is a free time hobby, I'm not a dev - I'm a security consultant and while I
 - [ ] **About** ->
   - [ ] `AboutActivity` with Github link for updates, Version (/ commit hash + date)
   - [ ] <u>and release from GH</u> + instructions to install from unknown sources - but switch back off afterwards
-- [ ] Settings -> `SettingsActivity` 
-  - [ ] Auto-refresh interval - Subtitle: Last Refresh
+- [x] Settings -> `SettingsActivity` 
+  - [x] Auto-refresh interval - Subtitle: Last Refresh
   - [ ] Option to hide app icon
-  - [ ] Untrack list (greyed out if not tracking)
+  - [x] Untrack list (greyed out if not tracking)
   - [ ] **Parameterized** OMDB API key + Field in `ConfigActivity` to receive it
-  
 - [ ] Styling
   - [ ] display a collage/tiling of titles' posters, below the Status ("Empty"/"N titles"), fading towards the FAB 
   - [ ] show List (Name?) currently traced
   - [ ] night theme doesn't work nice
 - [ ] **Spinners and Loading TODOs**
+  - [ ] That broken refresh animation
 - [ ] TODOs and Error handling 
   - [ ] What happens to posters when API key reaches max?
+  - [ ] Test case: multiple widgets?
 - [ ] Security fixes
   - [ ] Encrypted Prefs to protect the user's watchlist (and OMDB key)
   - [ ] Provider permission
@@ -99,3 +100,9 @@ This is a free time hobby, I'm not a dev - I'm a security consultant and while I
   - [ ] Grid
   - [ ] Stack
   - [ ] Flipper
+
+- [ ] Customise Night theme
+- [ ] Larger display on larger screens (higher dpi?)
+- [ ] Widget customisation?
+- [ ] 
+  End long titles in ...

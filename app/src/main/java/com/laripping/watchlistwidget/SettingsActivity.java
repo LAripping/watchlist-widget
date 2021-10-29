@@ -1,5 +1,7 @@
 package com.laripping.watchlistwidget;
 
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -26,6 +28,7 @@ import androidx.work.WorkManager;
 public class SettingsActivity extends AppCompatActivity {
     public static final String SETTING_KEY_IVAL = "RefreshInterval";
     public static final int DEFAULT_IVAL = 1;
+    private static String TAG = "Settings";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -136,7 +139,23 @@ public class SettingsActivity extends AppCompatActivity {
              * "Others" Prefs
              */
             SwitchPreferenceCompat moviesPref = findPreference(getResources().getString(R.string.key_show_only_movies));
-            //TODO
+            moviesPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                /**
+                 * Signal the update to any widgets so that they can re-populate their cursors
+                 * through an invocation of their onDataSetChanged()
+                 * @param preference
+                 * @param newValue
+                 * @return
+                 */
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    AppWidgetManager mgr = AppWidgetManager.getInstance(getContext());
+                    ComponentName cn = new ComponentName(getContext(), WatchlistWidget.class);
+                    mgr.notifyAppWidgetViewDataChanged(mgr.getAppWidgetIds(cn), R.id.title_list);
+                    Log.d(TAG,"onlyMovies.onPrefChanged() -> widget signalled");
+                    return true;
+                }
+            });
             EditTextPreference keyPref = findPreference(getResources().getString(R.string.key_api_key));
             //TODO
 

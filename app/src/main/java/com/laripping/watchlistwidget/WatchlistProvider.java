@@ -13,6 +13,8 @@ import android.text.TextUtils;
 import android.util.Log;
 import androidx.annotation.Nullable;
 
+import java.util.Arrays;
+
 
 public class WatchlistProvider extends ContentProvider {
     public static final String TAG = "WWProvider";
@@ -75,13 +77,12 @@ public class WatchlistProvider extends ContentProvider {
     public Uri insert(Uri uri, ContentValues values) {
         Log.d(TAG,"insert() URI: "+uri);
         if (uriMatcher.match(uri) == PATTERN_ALL) { // not technically an _ALL operation
-            Title.Type type = Enum.valueOf(Title.Type.class, values.getAsString(AppDatabaseSqlite.COLUMN_TYPE) );
-            if(type!=Title.Type.movie && type!=Title.Type.tvMovie){
-                // Design decision: We won't add series / mini series
-                // TODO parameterise this is in settings
-                Log.i(TAG,"Title "+values.getAsString(AppDatabaseSqlite.COLUMN_TITLE)+" was not a movie. Ignored");
-                return null;
-            }
+            // This is now parameterised in settings, insert all - query acording to the Pref
+//            Title.Type type = Enum.valueOf(Title.Type.class, values.getAsString(AppDatabaseSqlite.COLUMN_TYPE) );
+//            if(type!=Title.Type.movie && type!=Title.Type.tvMovie){
+//                Log.i(TAG,"Title "+values.getAsString(AppDatabaseSqlite.COLUMN_TITLE)+" was not a movie. Ignored");
+//                return null;
+//            }
             try{
                 long id = dbInstance.insertOrThrow(AppDatabaseSqlite.TABLE_NAME, null, values);
                 Uri ret_uri = ContentUris.withAppendedId(CONTENT_URI, id);
@@ -110,12 +111,17 @@ public class WatchlistProvider extends ContentProvider {
     @Override
     public Cursor query(Uri uri, String[] projection, String selection,
                         String[] selectionArgs, String sortOrder) {
-        Log.d(TAG,"query() URI: "+uri);
+        Log.d(TAG,String.format("query() \n\tURI: %s\n\tselection: %s\n\tselectionArgs: %s",
+                uri, selection, Arrays.toString(selectionArgs))
+        );
+        Log.d(TAG,"selection: query() URI: "+uri);
         Cursor cursor = null;
         // If the incoming URI was for all of "titles" - sole case so far
         if (uriMatcher.match(uri) == PATTERN_ALL) {
             if (TextUtils.isEmpty(sortOrder)) sortOrder = "_ID ASC";
-            cursor = dbInstance.query(AppDatabaseSqlite.TABLE_NAME, AppDatabaseSqlite.ALL_COLUMNS, selection, null, null, null," _ID ASC");
+            if (selection==null) selectionArgs = null;
+
+            cursor = dbInstance.query(AppDatabaseSqlite.TABLE_NAME, AppDatabaseSqlite.ALL_COLUMNS, selection, selectionArgs, null, null," _ID ASC");
             cursor.setNotificationUri(getContext().getContentResolver(), uri);
             return cursor;
         }
