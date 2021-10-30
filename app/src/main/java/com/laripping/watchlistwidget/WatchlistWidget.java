@@ -18,7 +18,6 @@ import android.widget.Toast;
 
 /**
  * Implementation of App Widget functionality.
- * NOT USED YET - App Widget Configuration implemented in {@link WatchlistWidgetConfigureActivity WatchlistWidgetConfigureActivity}
  */
 public class WatchlistWidget extends AppWidgetProvider {
 

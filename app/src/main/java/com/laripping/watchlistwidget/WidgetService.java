@@ -144,10 +144,11 @@ public class WidgetService extends RemoteViewsService {
             rv.setTextViewText(R.id.widget_item_title, firstRow);
             rv.setTextViewText(R.id.widget_item_subtitle, secondRow);
             rv.setTextViewText(R.id.widget_item_rating, rating);
-            String posterUrl = String.format("https://img.omdbapi.com/?apikey=%s&i=%s",BuildConfig.OMDB_KEY,item.gettConst());
-
-//            new DownloadImageTask(rv, item.gettConst()).execute(posterUrl);
-            loadPoster(rv, posterUrl, item.gettConst());
+            String omdbApiKey = new AppState(mContext).getApiKey();
+            if(omdbApiKey!=null){       // only loadPoster() if an API key is set
+                String posterUrl = String.format("https://img.omdbapi.com/?apikey=%s&i=%s",omdbApiKey,item.gettConst());
+                loadPoster(rv, posterUrl, item.gettConst());
+            }
 
             // Set the click FillIntent (similar to the PendingIntent one) so that we can handle it in the provider's onReceive()
             Intent fillInIntent = new Intent();

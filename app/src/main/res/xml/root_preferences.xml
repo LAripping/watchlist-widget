@@ -17,8 +17,7 @@
             app:key="@string/key_last_refresh"
             app:title="Last auto-refresh"
             app:selectable="false"
-            app:persistent="false"
-            android:persistent="false" />
+            app:persistent="false" />
     </PreferenceCategory>
 
     <PreferenceCategory app:title="Others">
@@ -30,8 +29,8 @@
             app:summaryOn="Showing only movies and TV movies" />
         <EditTextPreference
             app:key="@string/key_api_key"
-            app:title="OMDB API Key"
-            app:useSimpleSummaryProvider="true" />
+            app:persistent="false"
+            app:title="OMDB API Key" />
     </PreferenceCategory>
 
     <PreferenceCategory app:title="About">

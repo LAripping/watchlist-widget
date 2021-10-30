@@ -156,8 +156,44 @@ public class SettingsActivity extends AppCompatActivity {
                     return true;
                 }
             });
+
             EditTextPreference keyPref = findPreference(getResources().getString(R.string.key_api_key));
-            //TODO
+            String apikey = getContext()
+                    .getSharedPreferences(AppState.PREF_FILE_NAME,Context.MODE_PRIVATE)
+                    .getString(
+                            AppState.PREF_APIKEY_KEY,
+                            null
+                    );
+            String yesButMasked = getResources().getString(R.string.configured);
+            keyPref.setSummary(  apikey==null?"No API key specified!": yesButMasked );
+            keyPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    SharedPreferences.Editor editor = getContext()
+                            .getSharedPreferences(AppState.PREF_FILE_NAME, Context.MODE_PRIVATE)
+                            .edit();
+                    editor.putString(AppState.PREF_APIKEY_KEY,newValue.toString());
+                    editor.apply();
+
+                    AppWidgetManager mgr = AppWidgetManager.getInstance(getContext());
+                    ComponentName cn = new ComponentName(getContext(), WatchlistWidget.class);
+                    mgr.notifyAppWidgetViewDataChanged(mgr.getAppWidgetIds(cn), R.id.title_list);
+                    Log.d(TAG,"apikey.onPrefChanged() -> widget signalled");
+
+                    preference.setSummary(yesButMasked);
+                    return true;
+                }
+            });
+            keyPref.setOnBindEditTextListener(new EditTextPreference.OnBindEditTextListener() {
+                /**
+                 * Overriding to show the API key once the dialog is open
+                 * @param editText
+                 */
+                @Override
+                public void onBindEditText(@NonNull EditText editText) {
+                    editText.setText(apikey);
+                }
+            });
 
             /**
              * "About" Prefs

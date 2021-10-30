@@ -21,6 +21,7 @@ public class AppState {
     public static final String PREF_LIST_KEY = "ImdbListUrl";
     public static final String PREF_LIST_NAME = "ImdbListName";
     public static final String PREF_REFRESH_KEY = "LastRefresh";
+    public static final String PREF_APIKEY_KEY = "OmdbApiKey";
     private static final String TAG = "State";
     private Context context;
 
@@ -57,6 +58,12 @@ public class AppState {
         return context
                 .getSharedPreferences(PREF_FILE_NAME, Context.MODE_PRIVATE)
                 .getString(PREF_LIST_NAME,null);
+    }
+
+    public String getApiKey() {
+        return context
+                .getSharedPreferences(AppState.PREF_FILE_NAME,Context.MODE_PRIVATE)
+                .getString(AppState.PREF_APIKEY_KEY,null);
     }
 
     /////// Private Helpers

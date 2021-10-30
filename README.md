@@ -74,27 +74,37 @@ This is a free time hobby, I'm not a dev - I'm a security consultant and while I
 
 ## Roadmap
 
-- [ ] **About** ->
-  - [ ] `AboutActivity` with Github link for updates, Version (/ commit hash + date)
-  - [ ] <u>and release from GH</u> + instructions to install from unknown sources - but switch back off afterwards
-- [x] Settings -> `SettingsActivity` 
-  - [x] Auto-refresh interval - Subtitle: Last Refresh
-  - [ ] Option to hide app icon
-  - [x] Untrack list (greyed out if not tracking)
-  - [ ] **Parameterized** OMDB API key + Field in `ConfigActivity` to receive it
+- [ ] Last Setting and first release! (signed APK on Github release)
+
 - [ ] Styling
   - [ ] display a collage/tiling of titles' posters, below the Status ("Empty"/"N titles"), fading towards the FAB 
-  - [ ] show List (Name?) currently traced
+
+    OR
+
+  - [ ] Checklist. Titles "Let's get started!" / "Almost there!" / "All set and ready!"
+
+    > Subtitle shown if task not completed
+
+    - [ ] X Titles added (check DB count) - Click the button below to add some movies
+    - [ ] Tracking list "prefs.name" (check prefs.url) - Point to an IMDB list to track as your watchilst
+    - [ ] Widget Placed - Long press your home screen to place a watchlist widget
+    - [ ] Key for Posters specified (check prefs) - Generate your OMDB API key and provide it in Settings
+
   - [ ] night theme doesn't work nice
+
 - [ ] **Spinners and Loading TODOs**
+  
   - [ ] That broken refresh animation
+  
 - [ ] TODOs and Error handling 
   - [ ] What happens to posters when API key reaches max?
   - [ ] Test case: multiple widgets?
+  
 - [ ] Security fixes
   - [ ] Encrypted Prefs to protect the user's watchlist (and OMDB key)
   - [ ] Provider permission
   - [ ] Permission (?) to launch `ConfigActivity`
+  
 - [ ] Implement different  [Widget types](https://developer.android.com/guide/topics/appwidgets/collections):
   - [x] List
   - [ ] Grid
@@ -102,7 +112,10 @@ This is a free time hobby, I'm not a dev - I'm a security consultant and while I
   - [ ] Flipper
 
 - [ ] Customise Night theme
+
 - [ ] Larger display on larger screens (higher dpi?)
+
 - [ ] Widget customisation?
+
 - [ ] 
   End long titles in ...
