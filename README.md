@@ -51,30 +51,45 @@ This is a free time hobby, I'm not a dev - I'm a security consultant and while I
 
 ## Usage Instructions
 
-1. Clone the project and load into Android Studio
+1. Download the latest APK from the [Releases](https://github.com/laripping/watchlist-widget/releases) tab 
 
-2. Register for a free OMDB API key [here](http://www.omdbapi.com/apikey.aspx)  - otherwise I'd need to do naughty stuff with the private IMDB API 
+2. "Allow untrusted sources" and install the app from your download folder
 
-3. Place it in a file in the project root as below, named `apikey.properties`
+3. :warning: Remember to re-disable installing from untrusted sources!  
 
-   ```
-   OMDB_KEY="XXXXXXXXX"
-   ```
+4. Launch the app and populate your watchlist using one of the following ways:
 
-4. Build as usual and side-load to device (or just enable USB debugging)
+   * From an IMDB list - Just make sure your list is public! 
 
-5. Launch app and now you have 2 ways to add watchlist titles:
+     > ...official IMDB guidance on the relevant [FAQ](https://help.imdb.com/article/imdb/track-movies-tv/watchlist-faq/G9PA556494DM8YBA#)
 
-   * Export your IMDB watchlist as a CSV file, download to the device, and select it through the "Import" functionality
-   * Make your IMDB watchlist public (by following the official IMDB guidance on the relevant [FAQ](https://help.imdb.com/article/imdb/track-movies-tv/watchlist-faq/G9PA556494DM8YBA#)) and provide the URL in the "Point to URL"  functionality
+     The app will make sure the pulled list of titles is always up to date
 
-6. Place a widget on your screen and chill :popcorn::popcorn:
+   * From a pre-exported IMDB list, downloaded as a CSV file to your device
+
+5. Register for a free OMDB API key [here](http://www.omdbapi.com/apikey.aspx) and specify it in the app's settings
+
+   > ...otherwise I'd need to do naughty stuff with the private IMDB API
+
+6. Place a widget on your screen and start scrolling! :popcorn::popcorn:
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 ## Roadmap
 
-- [ ] Last Setting and first release! (signed APK on Github release)
+- [ ] Last Setting, update Readme, first release! (signed APK on Github releases)
 
 - [ ] Styling
   - [ ] display a collage/tiling of titles' posters, below the Status ("Empty"/"N titles"), fading towards the FAB 
