@@ -7,6 +7,16 @@ plugins {
 //def apikeyProperties = new Properties()
 //apikeyProperties.load(new FileInputStream(apikeyPropertiesFile))
 
+def getGitHash = { ->
+    def stdout = new ByteArrayOutputStream()
+    exec {
+        commandLine 'git', 'rev-parse', '--short', 'HEAD'
+        standardOutput = stdout
+    }
+    return stdout.toString().trim()
+}
+
+
 android {
     compileSdk 31
 
@@ -14,8 +24,9 @@ android {
         applicationId "com.laripping.watchlistwidget"
         minSdk 26
         targetSdk 31
-        versionCode 1
-        versionName "1.0"
+        versionCode 100
+        versionName "1.0.0"
+        buildConfigField "String", "GIT_COMMIT", "\"${getGitHash()}\""
 //        buildConfigField("String", "OMDB_KEY", apikeyProperties['OMDB_KEY'])
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

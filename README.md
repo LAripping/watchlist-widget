@@ -90,8 +90,6 @@ This is a free time hobby, I'm not a dev - I'm a security consultant and while I
     - [ ] Widget Placed - Long press your home screen to place a watchlist widget
     - [ ] Key for Posters specified (check prefs) - Generate your OMDB API key and provide it in Settings
 
-  - [ ] night theme doesn't work nice
-
 - [ ] **Spinners and Loading TODOs**
   
   - [ ] That broken refresh animation
@@ -119,3 +117,4 @@ This is a free time hobby, I'm not a dev - I'm a security consultant and while I
 
 - [ ] 
   End long titles in ...
+

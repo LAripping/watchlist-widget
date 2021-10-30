@@ -199,35 +199,11 @@ public class SettingsActivity extends AppCompatActivity {
              * "About" Prefs
              */
             Preference versPref = findPreference(getResources().getString(R.string.key_version));
-            // TODO set the version programmatically
+            versPref.setSummary(
+                    String.format("Version %s\nGit commit %s",BuildConfig.VERSION_NAME, BuildConfig.GIT_COMMIT)
+            );
 
         }
     }
 
-    /**
-     * Custom datastore for the "Last Auto-Refresh" preference
-     * to override the default SharedPreferences data store
-     * ...with another Sharedpreferences-backed datastore
-     * - one that's editable and  whose keys and names we control though
-     */
-    public static class LastRefreshDataStore extends PreferenceDataStore {
-        private static final String TAG = "LastRefresh";
-        private Context mContext;
-
-        public LastRefreshDataStore(Context ctx){
-            this.mContext = ctx;
-        }
-
-        @Override
-        @Nullable
-        public String getString(String key, @Nullable String defValue) {
-            Log.d(TAG,"getString()");       // never called
-            return mContext
-                    .getSharedPreferences(AppState.PREF_FILE_NAME, Context.MODE_PRIVATE)
-                    .getString(
-                            AppState.PREF_REFRESH_KEY,
-                            "DEF"
-                    );
-        }
-    }
 }

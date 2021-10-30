@@ -50,3 +50,4 @@ private/
 # API keys
 apikey.properties
 /WATCH.csv
+/app/release/output-metadata.json
