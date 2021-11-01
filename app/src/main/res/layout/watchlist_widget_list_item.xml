@@ -32,10 +32,11 @@
                 android:id="@+id/widget_item_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Cool Title (1994)"
+                android:text="Cool but all so very verryyy long title for testing purposes (1994)"
                 android:layout_weight="1"
                 android:textColor="@color/white"
                 android:maxLines="1"
+                android:ellipsize="end"
                 android:textSize="16sp" />
 
             <TextView

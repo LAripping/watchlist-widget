@@ -1,18 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"-->
-<!--    android:configure="com.laripping.watchlistwidget.WatchlistWidgetConfigureActivity" TODO add configAct on Roadmap step-->
-<!--    android:description="@string/app_widget_description"-->
-<!--    android:initialKeyguardLayout="@layout/watchlist_widget_default"-->
-<!--    android:initialLayout="@layout/watchlist_widget_default"-->
-<!--    android:minWidth="180dp"-->
-<!--    android:minHeight="110dp"-->
-<!--    android:previewImage="@mipmap/ic_launcher"                           TODO add a proper list preview-->
-<!--    android:previewLayout="@layout/watchlist_widget_default"-->
-<!--    android:resizeMode="horizontal|vertical"-->
-<!--    android:targetCellWidth="3"-->
-<!--    android:targetCellHeight="2"-->
-<!--    android:updatePeriodMillis="1800000"            30 mins = the minimum -->
-<!--    android:widgetCategory="home_screen" />-->
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
     android:description="@string/app_widget_description"
     android:initialLayout="@layout/watchlist_widget_list_layout"

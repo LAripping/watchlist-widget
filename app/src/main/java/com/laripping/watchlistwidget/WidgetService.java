@@ -202,7 +202,7 @@ public class WidgetService extends RemoteViewsService {
                 Glide.with(this.mContext).clear(submit);
             } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
-                // TODO error handling. Just no img or API issue?
+                // uses the default img we've created, so all good
             }
         }
     }

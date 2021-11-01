@@ -3,7 +3,6 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory app:title="IMDB List Tracking">
-        <!--        TODO grey everything out programmatically when imported from file -->
         <Preference
             app:key="@string/key_imdb_list"
             app:title="Tracking IMDB list"

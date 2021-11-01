@@ -133,7 +133,6 @@ public class WatchlistProvider extends ContentProvider {
     public int update(Uri uri, ContentValues values, String selection,
                       String[] selectionArgs) {
         Log.d(TAG,"update() URI: "+uri);
-        // TODO: Implement this to handle requests to update one or more rows.
         throw new UnsupportedOperationException("Not yet implemented");
     }
 }
