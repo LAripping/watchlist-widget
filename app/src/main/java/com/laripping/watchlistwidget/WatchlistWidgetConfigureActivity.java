@@ -2,19 +2,14 @@ package com.laripping.watchlistwidget;
 
 import android.app.Activity;
 import android.appwidget.AppWidgetManager;
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.RadioButton;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentActivity;
 import androidx.preference.PreferenceManager;
 
@@ -30,7 +25,7 @@ public class WatchlistWidgetConfigureActivity extends FragmentActivity implement
     private static final String TAG = "WWConfigActivity";
     private WatchlistWidgetConfigureBinding binding;
     private CsvUtils mCsvUtils;
-    private boolean listFromUl;
+    private boolean listFromUrl;
     private int mAppWidgetId;
     private AppState mAppState;
 
@@ -67,7 +62,7 @@ public class WatchlistWidgetConfigureActivity extends FragmentActivity implement
             finish();
         });
         findViewById(R.id.config_ok).setOnClickListener(v -> {
-            if(listFromUl){
+            if(listFromUrl){
                 new URLDialog().show(getSupportFragmentManager(),"urldialog");
             } else {        // from file
                 mCsvUtils.openFilePicker();
@@ -105,11 +100,11 @@ public class WatchlistWidgetConfigureActivity extends FragmentActivity implement
         switch(view.getId()) {
             case R.id.radio_file:
                 if (checked)
-                    listFromUl = false;
+                    listFromUrl = false;
                     break;
             case R.id.radio_url:
                 if (checked)
-                    listFromUl = true;
+                    listFromUrl = true;
                     break;
         }
     }

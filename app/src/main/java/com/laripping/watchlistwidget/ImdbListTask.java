@@ -72,6 +72,13 @@ public class ImdbListTask extends AsyncTask<Void,Integer,Integer> {
         mSwipeRefreshLayout = srl;
     }
 
+    @Override
+    protected void onPreExecute() {
+        Toast.makeText(mContext,
+                "Parsing IMDB list...",
+                Toast.LENGTH_SHORT
+        ).show();
+    }
 
     /**
      *
@@ -83,102 +90,102 @@ public class ImdbListTask extends AsyncTask<Void,Integer,Integer> {
     @Override
     protected Integer doInBackground(Void... params) {
 
-            String listUrl = mContext
-                    .getSharedPreferences(AppState.PREF_FILE_NAME, Context.MODE_PRIVATE)
-                    .getString(AppState.PREF_LIST_KEY, null);
-            if (listUrl == null) {
-                Log.e(TAG, "Whoops! listUrl from sharedprefs is null!");
-                return RESULT_CODE_UNKNOWN;         // This shouldn't happen... Let's investigate
+        String listUrl = mContext
+                .getSharedPreferences(AppState.PREF_FILE_NAME, Context.MODE_PRIVATE)
+                .getString(AppState.PREF_LIST_KEY, null);
+        if (listUrl == null) {
+            Log.e(TAG, "Whoops! listUrl from sharedprefs is null!");
+            return RESULT_CODE_UNKNOWN;         // This shouldn't happen... Let's investigate
+        }
+
+        Log.d(TAG, "Processing list URL: " + listUrl);
+        Request listRequest = null;
+        Request exportRequest = null;
+        Response listResponse = null;
+        Response exportResponse = null;
+
+        try {
+            // Check and Normalise url
+            listUrl = URLDialog.checkImdbListUrl(listUrl);
+            if (listUrl == null) return RESULT_CODE_BAD_URL;
+
+            // Check if list is public
+            /** Cheeky difference between Public and Private list
+             * In [1]: import requests
+             * In [2]: resp = requests.get('https://www.imdb.com/list/ls075069544/')
+             * In [3]: "<title>IMDb</title>" in resp.text
+             * Out[3]: True
+             * In [4]: resp2 = requests.get('https://www.imdb.com/list/ls075069551/')
+             * In [5]: "<title>IMDb</title>" in resp2.text
+             * Out[5]: False
+             */
+            listRequest = new Request.Builder()
+                    .url(listUrl)
+                    .get()
+                    .build();
+            listResponse = mClient.newCall(listRequest).execute();
+            if (listResponse.code() != 200) {
+                Log.e(TAG, String.format("Request for %s returned response code %d!", listUrl, listResponse.code()));
+                return RESULT_CODE_UNKNOWN;     // This shouldn't happen... Let's investigate
+            }
+            String body = listResponse.body().string();
+            if (body.contains("<title>IMDb</title>")) {
+                // List Non-Public
+                return RESULT_CODE_NOT_PUBLIC;
             }
 
-            Log.d(TAG, "Processing list URL: " + listUrl);
-            Request listRequest = null;
-            Request exportRequest = null;
-            Response listResponse = null;
-            Response exportResponse = null;
-
-            try {
-                // Check and Normalise url
-                listUrl = URLDialog.checkImdbListUrl(listUrl);
-                if (listUrl == null) return RESULT_CODE_BAD_URL;
-
-                // Check if list is public
-                /** Cheeky difference between Public and Private list
-                 * In [1]: import requests
-                 * In [2]: resp = requests.get('https://www.imdb.com/list/ls075069544/')
-                 * In [3]: "<title>IMDb</title>" in resp.text
-                 * Out[3]: True
-                 * In [4]: resp2 = requests.get('https://www.imdb.com/list/ls075069551/')
-                 * In [5]: "<title>IMDb</title>" in resp2.text
-                 * Out[5]: False
-                 */
-                listRequest = new Request.Builder()
-                        .url(listUrl)
-                        .get()
-                        .build();
-                listResponse = mClient.newCall(listRequest).execute();
-                if (listResponse.code() != 200) {
-                    Log.e(TAG, String.format("Request for %s returned response code %d!", listUrl, listResponse.code()));
-                    return RESULT_CODE_UNKNOWN;     // This shouldn't happen... Let's investigate
-                }
-                String body = listResponse.body().string();
-                if (body.contains("<title>IMDb</title>")) {
-                    // List Non-Public
-                    return RESULT_CODE_NOT_PUBLIC;
-                }
-
-                // Parse the HTML for the list's title
-                String titleRegex = "<title>(.*?) - IMDb</title>";
-                Pattern imdbTitlePattern = Pattern.compile(titleRegex, Pattern.DOTALL);
-                Matcher matcher = imdbTitlePattern.matcher(body);
-                if(!matcher.find()){
-                    Log.d(TAG,"Title not found by the regex!");
-                } else{
-                    String title = matcher.group(1);
-                    Log.d(TAG,"IMDB List Title captured: "+ title);
-                    SharedPreferences.Editor editor = mContext
-                            .getSharedPreferences(AppState.PREF_FILE_NAME, Context.MODE_PRIVATE)
-                            .edit();
-                    editor.putString(AppState.PREF_LIST_NAME, title);
-                    editor.apply();
-                }
-
-
-
-                publishProgress(25);  // leads to an invocation of onProgressUpdate()
-
-                // Fetch the list's CSV version
-                Log.d(TAG, "Requesting the /export endpoint...");
-                exportRequest = new Request.Builder()
-                        .url(listUrl + "/export")
-                        .get()
-                        .build();
-                exportResponse = mClient.newCall(exportRequest).execute();
-                if (exportResponse.code() != 200) {
-                    Log.e(TAG, String.format("Export request returned response code %d!", exportResponse.code()));
-                    return RESULT_CODE_UNKNOWN;
-
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-                return RESULT_CODE_NETWORK_ERROR;
-            }
-            publishProgress(60);  // leads to an invocation of onProgressUpdate()
-
-            try {
-                // Parse CSV file using old tricks
-                InputStream inputStream = exportResponse.body().byteStream();
-                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-                CsvUtils csv = new CsvUtils(mContext);
-                csv.parseCsvFile(reader);       // encapsulates the provider.insert()
-            } catch (IOException e) {
-                e.printStackTrace();
-                return RESULT_CODE_CSV_PARSER;
+            // Parse the HTML for the list's title
+            String titleRegex = "<title>(.*?) - IMDb</title>";
+            Pattern imdbTitlePattern = Pattern.compile(titleRegex, Pattern.DOTALL);
+            Matcher matcher = imdbTitlePattern.matcher(body);
+            if(!matcher.find()){
+                Log.d(TAG,"Title not found by the regex!");
+            } else{
+                String title = matcher.group(1);
+                Log.d(TAG,"IMDB List Title captured: "+ title);
+                SharedPreferences.Editor editor = mContext
+                        .getSharedPreferences(AppState.PREF_FILE_NAME, Context.MODE_PRIVATE)
+                        .edit();
+                editor.putString(AppState.PREF_LIST_NAME, title);
+                editor.apply();
             }
 
-            Log.i(TAG,"doInBackground() finished with no errors");
-            publishProgress(100);  // leads to an invocation of onProgressUpdate()
-            return RESULT_CODE_SUCCESS;
+
+
+            publishProgress(25);  // leads to an invocation of onProgressUpdate()
+
+            // Fetch the list's CSV version
+            Log.d(TAG, "Requesting the /export endpoint...");
+            exportRequest = new Request.Builder()
+                    .url(listUrl + "/export")
+                    .get()
+                    .build();
+            exportResponse = mClient.newCall(exportRequest).execute();
+            if (exportResponse.code() != 200) {
+                Log.e(TAG, String.format("Export request returned response code %d!", exportResponse.code()));
+                return RESULT_CODE_UNKNOWN;
+
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return RESULT_CODE_NETWORK_ERROR;
+        }
+        publishProgress(60);  // leads to an invocation of onProgressUpdate()
+
+        try {
+            // Parse CSV file using old tricks
+            InputStream inputStream = exportResponse.body().byteStream();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+            CsvUtils csv = new CsvUtils(mContext);
+            csv.parseCsvFile(reader);       // encapsulates the provider.insert()
+        } catch (IOException e) {
+            e.printStackTrace();
+            return RESULT_CODE_CSV_PARSER;
+        }
+
+        Log.i(TAG,"doInBackground() finished with no errors");
+        publishProgress(100);  // leads to an invocation of onProgressUpdate()
+        return RESULT_CODE_SUCCESS;
 
     }
 

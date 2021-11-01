@@ -166,14 +166,13 @@ public class WidgetService extends RemoteViewsService {
         @Override
         public RemoteViews getLoadingView() {
             Log.d(TAG,"getLoadingView()");
-            // TODO spinner
             return null;
         }
 
         @Override
         public int getViewTypeCount() {
             Log.d(TAG,"getViewTypeCount()");
-            // the short and the wide format (TODO should we also count the dark variations?)
+            // the short and the wide format?? aint broke, aint fixing for now
             return 2;
         }
 
