@@ -7,11 +7,11 @@
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/imdbYellow</item>
-<!--        <item name="colorSecondaryVariant">@color/teal_700</item>-->
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
-        <!-- Customize your theme here. -->
+
+
     </style>
 
     <style name="Theme.WatchlistWidget.NoActionBar">
@@ -21,7 +21,9 @@
 
     <style name="Theme.WatchlistWidget.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-    <style name="Theme.WatchlistWidget.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="Theme.WatchlistWidget.PopupOverlay" parent="ThemeOverlay.AppCompat.Light">
+        <item name="android:textColorPrimary">@color/black</item>
+    </style>
 
     <style name="Theme.WatchlistWidget.AppWidgetContainerParent" parent="@android:style/Theme.DeviceDefault">
         <item name="appWidgetRadius">8dp</item>

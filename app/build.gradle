@@ -40,8 +40,10 @@ android {
         applicationId "com.laripping.watchlistwidget"
         minSdk 26
         targetSdk 31
-        versionCode getCodeFromtag()
-        versionName getGitTag()
+//        versionCode getCodeFromtag()
+//        versionName getGitTag()
+        versionCode 101
+        versionName "1.0.1"
         buildConfigField "String", "GIT_COMMIT", "\"${getGitHash()}\""
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

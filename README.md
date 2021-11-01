@@ -2,15 +2,15 @@
 
 # Watchlist Widget
 
-> An android app that beatifully displays a user's watchlist and has a home screen widget for it too! 
+> An android app that beatifully displays your IMDB watchlist on a home screen widget! 
 
-In every Android's I've ever owned, I would always make room in one of the home screens for movies, as a go-to place for when I want to chill and enjoy a film, populating it with all the relevant apps and widgets. What's always annoyingly missing is a cool widget to list my options and remind of good movies I've noted. Of course, like millions other users, I use my **IMDB** watchlist for this purpose... but the IMDB App doesn't offer a Widget to display any list.
+This app aims to provide a home screen widget for your IMDB watchlist. Something that the official IMDB app never supported and probably never will! In a few easy steps, you can have a scrollable widget to pick your next movie from, with posters, ratings and all. 
 
-This app aims to bridge that gap. Simplistic, and heavily inspired by "[TV Time](https://www.tvtime.com/)" (formerly "TV Show Time") - another excellent app (*which as of recently supports tracking Movies as well!*). It uses:
+"Watchlist Widget" is a simplistic Android application, heavily inspired by "[TV Time](https://www.tvtime.com/)" (formerly "TV Show Time"). Behind the scenes, it uses:
 
-* [OMDB API](http://www.omdbapi.com/) for fetching posters, the [Usage Instructions](#usage-instructions) for instructions on how to get your free API key and bundle within the app 
+* [OMDB API](http://www.omdbapi.com/) for fetching posters. Read [below](#usage-instructions) how to get your free API key and specify it in the app 
 * [Gllide](https://github.com/bumptech/glide) image loading and caching library
-* [Expandable-fab](https://github.com/nambicompany/expendable-fab) library to pump up my Floating Action Button
+* [Expandable-fab](https://github.com/nambicompany/expendable-fab) library for a pumped up  Floating Action Button (FAB)
 * [OkHttp](https://square.github.io/okhttp/) library for fetching IMDB lists 
 
 
@@ -37,15 +37,15 @@ This app aims to bridge that gap. Simplistic, and heavily inspired by "[TV Time]
 
 
 
-### Disclaimers :warning:
+### Disclaimer :warning:
 
-This is a free time hobby, I'm not a dev - I'm a security consultant and while I'd like to see people using my app and maybe take a glimpse of the support lifecycle, take this repo as it is:
+This is a free time hobby, I'm a hacker, not a dev and while I'd like to see people enjoy the app and I'd probably fix a bug or two,  take this repo as it is.
 
-:x: Through the eyes of a proper dev, the **code is probably shit**
+:x: The **code is probably shit** through the eyes of a proper dev
 
-:x: Of course **it doesn't include tests**, nor unit nor regression no nothing
+:x: **No tests in sight**, nor unit nor regression or anything. Too bored
 
-:x: It will by no means support many devices, hell, I've **only tried it in a Xiaomi Redmi 5 Plus**, and my own **Pixel 2**
+:x: I've **only tried it in a couple of devices**, and since it works, it works :P
 
 
 
@@ -59,15 +59,15 @@ This is a free time hobby, I'm not a dev - I'm a security consultant and while I
 
 4. Launch the app and populate your watchlist using one of the following ways:
 
-   * From an IMDB list - Just make sure your list is public! 
+   * From an IMDB list - *Just make sure your list is public!* 
 
      > ...official IMDB guidance on the relevant [FAQ](https://help.imdb.com/article/imdb/track-movies-tv/watchlist-faq/G9PA556494DM8YBA#)
 
-     The app will make sure the pulled list of titles is always up to date
+     The app (and widget) will always show the latest version of specified list 
 
    * From a pre-exported IMDB list, downloaded as a CSV file to your device
 
-5. Register for a free OMDB API key [here](http://www.omdbapi.com/apikey.aspx) and specify it in the app's settings
+5. You like posters don't you? Register for a free OMDB API key [here](http://www.omdbapi.com/apikey.aspx) and specify it in the app's settings
 
    > ...otherwise I'd need to do naughty stuff with the private IMDB API
 
@@ -123,8 +123,6 @@ This is a free time hobby, I'm not a dev - I'm a security consultant and while I
   - [ ] Grid
   - [ ] Stack
   - [ ] Flipper
-
-- [ ] Customise Night theme
 
 - [ ] Larger display on larger screens (higher dpi?)
 
