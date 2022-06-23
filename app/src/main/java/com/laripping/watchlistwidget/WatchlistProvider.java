@@ -121,7 +121,7 @@ public class WatchlistProvider extends ContentProvider {
             if (TextUtils.isEmpty(sortOrder)) sortOrder = "_ID ASC";
             if (selection==null) selectionArgs = null;
 
-            cursor = dbInstance.query(AppDatabaseSqlite.TABLE_NAME, AppDatabaseSqlite.ALL_COLUMNS, selection, selectionArgs, null, null," _ID ASC");
+            cursor = dbInstance.query(AppDatabaseSqlite.TABLE_NAME, AppDatabaseSqlite.ALL_COLUMNS, selection, selectionArgs, null, null, sortOrder);
             cursor.setNotificationUri(getContext().getContentResolver(), uri);
             return cursor;
         }

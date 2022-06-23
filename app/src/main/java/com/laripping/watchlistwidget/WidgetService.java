@@ -106,7 +106,7 @@ public class WidgetService extends RemoteViewsService {
                     AppDatabaseSqlite.ALL_COLUMNS,
                     selectionClause,
                     selectionArgs ,
-                    "_ID ASC");
+                    AppDatabaseSqlite.COLUMN_CREATED+" DESC");
             Log.i(TAG,"Cursor returned in time, includes "+mCursor.getCount()+" rows");
         }
 

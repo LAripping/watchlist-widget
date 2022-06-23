@@ -42,8 +42,8 @@ android {
         targetSdk 31
 //        versionCode getCodeFromtag()
 //        versionName getGitTag()
-        versionCode 102
-        versionName "1.0.2"
+        versionCode 103
+        versionName "1.0.3"
         buildConfigField "String", "GIT_COMMIT", "\"${getGitHash()}\""
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
