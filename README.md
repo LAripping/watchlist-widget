@@ -2,15 +2,15 @@
 
 # Watchlist Widget
 
-> An android app that beatifully displays your IMDB watchlist on a home screen widget! 
+***An android app that beautifully displays your IMDB watchlist on a home screen widget!*** 
 
-This app aims to provide a home screen widget for your IMDB watchlist. Something that the official IMDB app never supported and probably never will! In a few easy steps, you can have a scrollable widget to pick your next movie from, with posters, ratings and all. 
+"Watchlist Widget" is a simple Android application that provides a home screen widget for your IMDB watchlist. A feature that the official IMDB app never supported and probably never will. In a few easy steps, you can have a scrollable widget to pick your next movie from, with posters, ratings and all. 
 
-"Watchlist Widget" is a simplistic Android application, heavily inspired by "[TV Time](https://www.tvtime.com/)" (formerly "TV Show Time"). Behind the scenes, it uses:
+This app is heavily inspired by "[TV Time](https://www.tvtime.com/)" (formerly "TV Show Time"). Behind the scenes, it uses:
 
 * [OMDB API](http://www.omdbapi.com/) for fetching posters. Read [below](#usage-instructions) how to get your free API key and specify it in the app 
 * [Gllide](https://github.com/bumptech/glide) image loading and caching library
-* [Expandable-fab](https://github.com/nambicompany/expendable-fab) library for a pumped up  Floating Action Button (FAB)
+* [Expandable-fab](https://github.com/nambicompany/expendable-fab) library for a pumped up Floating Action Button (FAB)
 * [OkHttp](https://square.github.io/okhttp/) library for fetching IMDB lists 
 
 
@@ -19,57 +19,35 @@ This app aims to provide a home screen widget for your IMDB watchlist. Something
 
 ## Features
 
-:white_check_mark: ​Importing IMDB Watchlist from downloaded CSV file
+:white_check_mark: ​Link your IMDB Watchlist from it's URL or from a downloaded CSV file
 
-:white_check_mark: ​Pointing to a *public* IMDB Watchlist to track
+:white_check_mark: Place a scrollable widget on your home screen (pics below)
 
-:white_check_mark: Placing fancy, scrollable widgets on your home screen (pics below)
+:white_check_mark: Clicking titles brings you to the movie's IMDB page
 
-:white_check_mark: Clicking titles to get to the IMDB page
+:white_check_mark: Click the list header to open the app
 
-:white_check_mark: Pull down main app screen to manually refresh widget from tracked IMDB list 
+:white_check_mark: Pull down the app's main app screen to manually refresh widget from tracked IMDB list 
 
-| List Widget                 | Grid Widget                    | Stack Widget                   |
-| --------------------------- | ------------------------------ | ------------------------------ |
-| ![](listwidget-cropped.jpg) | :hourglass: ***Coming soon!*** | :hourglass: ***Coming soon!*** |
-
-
+| List Widget                     | Grid Widget                    | Stack Widget                   |
+| ------------------------------- | ------------------------------ | ------------------------------ |
+| ![](img/listwidget-cropped.jpg) | :hourglass: ***Coming soon!*** | :hourglass: ***Coming soon!*** |
 
 
-
-### Disclaimer :warning:
-
-This is a free time hobby, I'm a hacker, not a dev and while I'd like to see people enjoy the app and I'd probably fix a bug or two,  take this repo as it is.
-
-:x: The **code is probably shit** through the eyes of a proper dev
-
-:x: **No tests in sight**, nor unit nor regression or anything. Too bored
-
-:x: I've **only tried it in a couple of devices**, and since it works, it works :P
 
 
 
 ## Usage Instructions
 
 1. Download the latest APK from the [Releases](https://github.com/laripping/watchlist-widget/releases) tab 
-
 2. "Allow untrusted sources" and install the app from your download folder
-
 3. :warning: Remember to re-disable installing from untrusted sources!  
+4. Launch the app and link your IMDB watchlist using one of the following ways:
 
-4. Launch the app and populate your watchlist using one of the following ways:
-
-   * From an IMDB list - *Just make sure your list is public!* 
-
-     > ...official IMDB guidance on the relevant [FAQ](https://help.imdb.com/article/imdb/track-movies-tv/watchlist-faq/G9PA556494DM8YBA#)
-
-     The app (and widget) will always show the latest version of specified list 
-
-   * From a pre-exported IMDB list, downloaded as a CSV file to your device
-
-5. You like posters don't you? Register for a free OMDB API key [here](http://www.omdbapi.com/apikey.aspx) and specify it in the app's settings
-
-   > ...otherwise I'd need to do naughty stuff with the private IMDB API
+   * Pointing it to the list's IMDB URL - to always have your list's latest version on your home screen :heavy_check_mark:
+     :warning: Just make sure your list is public! [FAQ](https://help.imdb.com/article/imdb/track-movies-tv/watchlist-faq/G9PA556494DM8YBA#)
+   * Importing a pre-exported CSV snapshot of the IMDB, saved on the device - this will not follow upstream changes :cry:   
+5. To show movie posters on the widget, you can register for a free OMDB API key [here](http://www.omdbapi.com/apikey.aspx) and specify it in the app's settings
 
 6. Place a widget on your screen and start scrolling! :popcorn::popcorn:
 
