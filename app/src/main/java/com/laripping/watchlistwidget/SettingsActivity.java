@@ -200,7 +200,8 @@ public class SettingsActivity extends AppCompatActivity {
              */
             Preference versPref = findPreference(getResources().getString(R.string.key_version));
             versPref.setSummary(
-                    String.format("Version %s\nGit commit %s",BuildConfig.VERSION_NAME, BuildConfig.GIT_COMMIT)
+//                    String.format("Version %s\nGit commit %s",BuildConfig.VERSION_NAME, BuildConfig.GIT_COMMIT)
+                    String.format("Version %s",BuildConfig.VERSION_NAME)
             );
 
         }
