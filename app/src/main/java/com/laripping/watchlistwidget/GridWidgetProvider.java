@@ -146,7 +146,7 @@ public class GridWidgetProvider extends AppWidgetProvider {
      * Called when the widget is resized.
      * - AppWidgetManager#ACTION_APPWIDGET_OPTIONS_CHANGED
      *
-     * Decide if we're wide enough to include text, and update the widget anyway
+     * We currently do nothing here (except printing some incoming options) as it was too much of a PITA to resize grid dynamically before Android 12 and we stick to 3 cols
      * @param context
      * @param appWidgetManager
      * @param appWidgetId
@@ -157,7 +157,6 @@ public class GridWidgetProvider extends AppWidgetProvider {
         super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions);
         Log.d(TAG,"onAppWidgetOptionsChanged(). Widget with ID: "+appWidgetId+" resized. About to build RemoteView");
 
-        // TODO add logic to columns++ when width_cells++
         int minWidth = newOptions.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH);
         int maxWidth = newOptions.getInt(AppWidgetManager.OPTION_APPWIDGET_MAX_WIDTH);
         int minHeight = newOptions.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT);
