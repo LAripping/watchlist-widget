@@ -18,6 +18,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.FutureTarget;
 import com.bumptech.glide.request.target.Target;
 
+import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -26,11 +27,13 @@ import java.util.concurrent.ExecutionException;
  */
 public class WidgetService extends RemoteViewsService {
     private String TAG = "WService";
+    private String listOrGrid = "list";  // either "list" or "grid"
 
     @Override
     public IBinder onBind(Intent intent) {
         String action = intent.getAction();
-        Log.d(TAG,"onBind() - Intent action: "+action);
+        listOrGrid = intent.getStringExtra("listOrGridExtra");
+        Log.d(TAG,"onBind() - Intent action: "+action+" listOrGrid: "+listOrGrid);
         return super.onBind(intent);
     }
 
@@ -137,7 +140,11 @@ public class WidgetService extends RemoteViewsService {
                 Log.e(TAG,"Item not found at position "+i+"!");
             Title item = new Title(mCursor);
 
-            RemoteViews rv = new RemoteViews(mContext.getPackageName(), R.layout.watchlist_widget_list_item);
+            int layout_id = R.layout.watchlist_widget_list_item;
+            if(Objects.equals(listOrGrid, "grid")){
+                layout_id = R.layout.watchlist_widget_grid_item;
+            }
+            RemoteViews rv = new RemoteViews(mContext.getPackageName(), layout_id);
             String firstRow = String.format("%s (%d)", item.getTitle(), item.getYear());
             String secondRow = String.format("%d' \u2022 %s",item.getRuntime(), item.getGenres());
             String rating = String.format("%.1f",item.getRating());
@@ -147,13 +154,14 @@ public class WidgetService extends RemoteViewsService {
             String omdbApiKey = new AppState(mContext).getApiKey();
             if(omdbApiKey!=null){       // only loadPoster() if an API key is set
                 String posterUrl = String.format("https://img.omdbapi.com/?apikey=%s&i=%s",omdbApiKey,item.gettConst());
+                // poster size = ~200 (+-20) x 300 (fixed) px
                 loadPoster(rv, posterUrl, item.gettConst());
             }
 
             // Set the click FillIntent (similar to the PendingIntent one) so that we can handle it in the provider's onReceive()
             Intent fillInIntent = new Intent();
             Bundle extras = new Bundle();
-            extras.putString(WatchlistWidget.EXTRA_CONST, item.gettConst());
+            extras.putString(ListWidgetProvider.EXTRA_CONST, item.gettConst());
             fillInIntent.putExtras(extras);
             rv.setOnClickFillInIntent(R.id.widget_item, fillInIntent);
             return rv;

@@ -29,9 +29,9 @@ This app is heavily inspired by "[TV Time](https://www.tvtime.com/)" (formerly "
 
 :white_check_mark: Pull down the app's main app screen to manually refresh widget from tracked IMDB list 
 
-| List Widget                     | Grid Widget                    | Stack Widget                   |
-| ------------------------------- | ------------------------------ | ------------------------------ |
-| ![](img/listwidget-cropped.jpg) | :hourglass: ***Coming soon!*** | :hourglass: ***Coming soon!*** |
+| List Widget                 | Grid Widget                 | Stack Widget                   |
+| --------------------------- | --------------------------- | ------------------------------ |
+| ![](img/listwidget-bgy.png) | ![](img/gridwidget-bgy.png) | :hourglass: ***Coming soon!*** |
 
 
 

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    android:description="@string/app_widget_description"
+    android:initialLayout="@layout/watchlist_widget_grid_layout"
+    android:minWidth="203dp"
+    android:minHeight="220dp"
+    android:minResizeWidth="203dp"
+    android:minResizeHeight="220dp"
+    android:previewImage="@drawable/ic_widget_preview_list"
+    android:resizeMode="vertical"
+    android:configure="com.laripping.watchlistwidget.WatchlistWidgetConfigureActivity"
+    android:updatePeriodMillis="1800000"
+    android:widgetCategory="home_screen" />
+<!--TODO add a proper preview-->
+<!--stick with 3 rows -> 3x2 cells ~= min 203 : 220 == absolute mins, only resize vertical (taller/shorter)-->
+<!--203 / 3 = ~67 say 65dp per column. Then, with x=65, to keep a x/1.36x ratio (2.2/3) the poster should be 65x88.5dp-->
+<!--say rating is 25x25 thus the entire item should be 65 x 113.5dp-->

@@ -18,7 +18,6 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import java.io.BufferedReader;
@@ -207,10 +206,13 @@ public class ImdbListTask extends AsyncTask<Void,Integer,Integer> {
                     // Signal the change back to MainActivity
                     mListener.onComplete(true);
 
-                    // Update the widget
+                    // Update all types of widgets
                     AppWidgetManager mgr = AppWidgetManager.getInstance(mContext);
-                    ComponentName cn = new ComponentName(mContext, WatchlistWidget.class);
+                    ComponentName cn = new ComponentName(mContext, ListWidgetProvider.class);
                     mgr.notifyAppWidgetViewDataChanged(mgr.getAppWidgetIds(cn), R.id.title_list);
+
+                    ComponentName cn2 = new ComponentName(mContext, GridWidgetProvider.class);
+                    mgr.notifyAppWidgetViewDataChanged(mgr.getAppWidgetIds(cn2), R.id.title_grid);
                     break;
 
                 /////// ERROR CASES //////////

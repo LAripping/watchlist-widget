@@ -10,20 +10,15 @@ import android.os.Bundle;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.MenuItem;
 import android.widget.EditText;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NavUtils;
 import androidx.preference.EditTextPreference;
 import androidx.preference.Preference;
-import androidx.preference.PreferenceDataStore;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreferenceCompat;
-import androidx.work.WorkManager;
 
 public class SettingsActivity extends AppCompatActivity {
     public static final String SETTING_KEY_IVAL = "RefreshInterval";
@@ -150,8 +145,13 @@ public class SettingsActivity extends AppCompatActivity {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
                     AppWidgetManager mgr = AppWidgetManager.getInstance(getContext());
-                    ComponentName cn = new ComponentName(getContext(), WatchlistWidget.class);
+
+                    ComponentName cn = new ComponentName(getContext(), ListWidgetProvider.class);
                     mgr.notifyAppWidgetViewDataChanged(mgr.getAppWidgetIds(cn), R.id.title_list);
+
+                    ComponentName cn2 = new ComponentName(getContext(), GridWidgetProvider.class);
+                    mgr.notifyAppWidgetViewDataChanged(mgr.getAppWidgetIds(cn2), R.id.title_grid);
+
                     Log.d(TAG,"onlyMovies.onPrefChanged() -> widget signalled");
                     return true;
                 }
@@ -176,7 +176,7 @@ public class SettingsActivity extends AppCompatActivity {
                     editor.apply();
 
                     AppWidgetManager mgr = AppWidgetManager.getInstance(getContext());
-                    ComponentName cn = new ComponentName(getContext(), WatchlistWidget.class);
+                    ComponentName cn = new ComponentName(getContext(), ListWidgetProvider.class);
                     mgr.notifyAppWidgetViewDataChanged(mgr.getAppWidgetIds(cn), R.id.title_list);
                     Log.d(TAG,"apikey.onPrefChanged() -> widget signalled");
 

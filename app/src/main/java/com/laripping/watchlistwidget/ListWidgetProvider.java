@@ -14,17 +14,16 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.util.Log;
 import android.widget.RemoteViews;
-import android.widget.Toast;
 
 /**
  * Implementation of App Widget functionality.
  */
-public class WatchlistWidget extends AppWidgetProvider {
+public class ListWidgetProvider extends AppWidgetProvider {
 
     private static final String REFRESH_ACTION = "com.laripping.watchlistwidget.REFRESH";
     private static final String CLICK_ACTION = "com.laripping.watchlistwidget.CLICK";
     public  static final String EXTRA_CONST = "com.laripping.watchlistwidget.const";
-    private static final String TAG = "WWidget";
+    private static final String TAG = "ListWidgetProvider";
 
     private static HandlerThread sWorkerThread;
     private static Handler sWorkerQueue;
@@ -33,7 +32,7 @@ public class WatchlistWidget extends AppWidgetProvider {
     private boolean mIsWide = true; // is it wide enough for icon+text? Default sizing says yes
 
 
-    public WatchlistWidget(){
+    public ListWidgetProvider(){
         Log.d(TAG,"ctor()");
         // Start the worker thread
         sWorkerThread = new HandlerThread("WatchlistWidget-worker");
@@ -56,7 +55,7 @@ public class WatchlistWidget extends AppWidgetProvider {
         ContentResolver r = context.getContentResolver();
         if (sDataObserver == null) {
             AppWidgetManager mgr = AppWidgetManager.getInstance(context);
-            ComponentName cn = new ComponentName(context, WatchlistWidget.class);
+            ComponentName cn = new ComponentName(context, ListWidgetProvider.class);
             sDataObserver = new WatchlistDataProviderObserver(mgr, cn, sWorkerQueue);
             r.registerContentObserver(WatchlistProvider.CONTENT_URI, true, sDataObserver);
         }
@@ -114,6 +113,7 @@ public class WatchlistWidget extends AppWidgetProvider {
             Intent serviceIntent = new Intent(context, WidgetService.class);
             // embed the appWidgetId via the data (otherwise it will be ignored)
             serviceIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+            serviceIntent.putExtra("listOrGridExtra","list");
             serviceIntent.setData(Uri.parse(serviceIntent.toUri(Intent.URI_INTENT_SCHEME)));
             rv = new RemoteViews(context.getPackageName(), R.layout.watchlist_widget_list_layout);
             rv.setRemoteAdapter(R.id.title_list, serviceIntent);
@@ -121,8 +121,8 @@ public class WatchlistWidget extends AppWidgetProvider {
 
             // 2 - Bind a click listener to each item
 
-            Intent onClickIntent = new Intent(context, WatchlistWidget.class);
-            onClickIntent.setAction(WatchlistWidget.CLICK_ACTION);
+            Intent onClickIntent = new Intent(context, ListWidgetProvider.class);
+            onClickIntent.setAction(ListWidgetProvider.CLICK_ACTION);
             // we need to update the intent's data if we set an extra (otherwise will be ignored)
             onClickIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
             onClickIntent.setData(Uri.parse(onClickIntent.toUri(Intent.URI_INTENT_SCHEME)));
@@ -213,7 +213,7 @@ public class WatchlistWidget extends AppWidgetProvider {
         if (action.equals(REFRESH_ACTION)) {
             // maybe all we need is :
             AppWidgetManager mgr = AppWidgetManager.getInstance(context);
-            ComponentName cn = new ComponentName(context, WatchlistWidget.class);
+            ComponentName cn = new ComponentName(context, ListWidgetProvider.class);
             mgr.notifyAppWidgetViewDataChanged(mgr.getAppWidgetIds(cn), R.id.title_list);
 
             // and none of the rest...
@@ -265,7 +265,7 @@ public class WatchlistWidget extends AppWidgetProvider {
         } else if (action.equals(CLICK_ACTION)) {
             int appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
                     AppWidgetManager.INVALID_APPWIDGET_ID);
-            String clickedConst = intent.getStringExtra(WatchlistWidget.EXTRA_CONST);
+            String clickedConst = intent.getStringExtra(ListWidgetProvider.EXTRA_CONST);
 
             String imdbUrl = String.format("https://www.imdb.com/title/%s/",clickedConst);
             Intent i = new Intent(Intent.ACTION_VIEW);
@@ -300,26 +300,5 @@ public class WatchlistWidget extends AppWidgetProvider {
 //    }
 
 
-    class WatchlistDataProviderObserver extends ContentObserver {
-        private AppWidgetManager mAppWidgetManager;
-        private ComponentName mComponentName;
-        private String TAG = "WWObserver";
 
-        WatchlistDataProviderObserver(AppWidgetManager mgr, ComponentName cn, Handler h) {
-            super(h);
-            Log.d(TAG,"ctor()");
-            mAppWidgetManager = mgr;
-            mComponentName = cn;
-        }
-
-        @Override
-        public void onChange(boolean selfChange) {
-            // The data has changed, so notify the widget that the collection view needs to be updated.
-            // In response, the factory's onDataSetChanged() will be called which will require the
-            // cursor for the new data.
-            Log.d(TAG,"onChange()");
-            mAppWidgetManager.notifyAppWidgetViewDataChanged(
-                    mAppWidgetManager.getAppWidgetIds(mComponentName), R.id.title_list);
-        }
-    }
 }

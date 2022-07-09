@@ -18,7 +18,7 @@ import com.laripping.watchlistwidget.databinding.WatchlistWidgetConfigureBinding
 import java.io.IOException;
 
 /**
- * The configuration screen for the {@link WatchlistWidget WatchlistWidget} AppWidget.
+ * The configuration screen for the {@link ListWidgetProvider WatchlistWidget} AppWidget.
  */
 public class WatchlistWidgetConfigureActivity extends FragmentActivity implements OnTaskCompleteListener {
     private static final int PICK_CSV_FILE = 2;
@@ -130,7 +130,7 @@ public class WatchlistWidgetConfigureActivity extends FragmentActivity implement
 
                 // build remoteviews for the widget
                 AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
-                WatchlistWidget.initWidget(this, appWidgetManager, mAppWidgetId);
+                ListWidgetProvider.initWidget(this, appWidgetManager, mAppWidgetId);
 
                 setResult(RESULT_OK);
                 finish();
@@ -145,7 +145,7 @@ public class WatchlistWidgetConfigureActivity extends FragmentActivity implement
 
             // build remoteviews for the widget
             AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
-            WatchlistWidget.initWidget(this, appWidgetManager, mAppWidgetId);
+            ListWidgetProvider.initWidget(this, appWidgetManager, mAppWidgetId);
 
 
             // get the refresh interval

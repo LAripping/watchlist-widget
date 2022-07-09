@@ -102,8 +102,11 @@ public class MainActivity extends AppCompatActivity implements OnTaskCompleteLis
         mText.setText(mAppState.getStatus());
 
         AppWidgetManager mgr = AppWidgetManager.getInstance(this);
-        ComponentName cn = new ComponentName(this, WatchlistWidget.class);
+        ComponentName cn = new ComponentName(this, ListWidgetProvider.class);
         mgr.notifyAppWidgetViewDataChanged(mgr.getAppWidgetIds(cn), R.id.title_list);
+
+        ComponentName cn2 = new ComponentName(this, GridWidgetProvider.class);
+        mgr.notifyAppWidgetViewDataChanged(mgr.getAppWidgetIds(cn2), R.id.title_grid);
     }
 
 

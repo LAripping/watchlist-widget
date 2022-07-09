@@ -59,4 +59,6 @@
     <string name="key_version">version</string>
     <string name="no_refreshes_yet">No auto-refreshes made yet!</string>
     <string name="configured">API Key Configured</string>
+    <string name="list_widget">List Widget</string>
+    <string name="grid_widget">Grid Widget</string>
 </resources>
